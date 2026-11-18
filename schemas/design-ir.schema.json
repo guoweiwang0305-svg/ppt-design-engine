@@ -274,5 +274,51 @@
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "nodes": {
+            "contains": {
+              "properties": {
+                "semantic_role": {
+                  "const": "metric"
+                }
+              },
+              "required": [
+                "semantic_role"
+              ]
+            }
+          }
+        },
+        "required": [
+          "nodes"
+        ]
+      },
+      "then": {
+        "properties": {
+          "nodes": {
+            "items": {
+              "if": {
+                "properties": {
+                  "semantic_role": {
+                    "const": "metric"
+                  }
+                },
+                "required": [
+                  "semantic_role"
+                ]
+              },
+              "then": {
+                "required": [
+                  "data_ref"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }
