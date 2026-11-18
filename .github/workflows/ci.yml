@@ -7,17 +7,27 @@ on:
     branches: [main]
 
 jobs:
-  foundation:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Install project and test dependencies
+        run: uv sync --extra dev
       - name: Validate JSON schemas
-        run: python - <<'PY'
-import json
-from pathlib import Path
-for p in Path("schemas").rglob("*.json"):
-    json.loads(p.read_text())
-for p in Path("styles").rglob("*.json"):
-    json.loads(p.read_text())
-print("JSON validation passed")
-PY
+        run: |
+          uv run python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in [*Path("schemas").rglob("*.json"), *Path("styles").rglob("*.json")]:
+              json.loads(path.read_text(encoding="utf-8"))
+          print("JSON syntax validation passed")
+          PY
+      - name: Run tests
+        run: uv run pytest
+      - name: Lint
+        run: uv run ruff check src tests
