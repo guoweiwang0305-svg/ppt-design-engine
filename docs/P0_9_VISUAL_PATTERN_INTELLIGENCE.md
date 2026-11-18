@@ -26,3 +26,5 @@ Geometry is editable-object bounding-box data, not pixel segmentation. Occupancy
 
 ## Next gates
 Add human-labelled visual benchmark; chart grammar validation; semantic icon registry with licensing; render-based QA for font size, contrast, overlap, alignment and focal dominance.
+
+The curated source index is stored at reference_data/insurance_reference_corpus_2026-11-18.json. It records the 60-slide AIA and 21-slide GCL decks as distinct evidence families, maps GCL page groups to candidate semantic/layout families, and links official Generali external references. It is an index/curation seed, not an automatically approved component library.
