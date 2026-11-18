@@ -182,8 +182,9 @@ def build_layout_plan(graph: InformationGraph, catalog: dict[str, Any],
     # the thesis node for the first title-like slot and preserve remaining nodes.
     for index, slot_id in enumerate(raw_slots):
         role = slot_id.replace("_", " ")
-        required = index < min(3, len(raw_slots))
-        max_items = max(1, len(nodes)) if index == len(raw_slots) - 1 else 1
+        title_only = slot_id in ("headline_conclusion", "comparison_question", "market_scope", "segmentation_basis", "customer_trigger", "geographic_scope")
+        required = (index < min(3, len(raw_slots))) and not title_only
+        max_items = 1
         spec = geo_slots.get(slot_id, {})
         geometry = Geometry.model_validate(spec["geometry"]) if spec.get("geometry") else None
         arrangement = spec.get("arrangement", "single")
@@ -196,6 +197,10 @@ def build_layout_plan(graph: InformationGraph, catalog: dict[str, Any],
             geometry=geometry, arrangement=arrangement,
         )
         slots.append(slot)
+        if title_only:
+            assignments.append(SlotAssignment(slot_id=slot_id, status="empty_optional",
+                note="Page thesis is rendered in the dedicated thesis node."))
+            continue
         candidates = [n for n in nodes if n.id not in used]
         if not candidates:
             assignments.append(SlotAssignment(
@@ -203,7 +208,7 @@ def build_layout_plan(graph: InformationGraph, catalog: dict[str, Any],
                 note="No unassigned InformationNode available.",
             ))
             continue
-        chosen = candidates[:max_items] if index == len(raw_slots) - 1 else candidates[:1]
+        chosen = candidates[:max_items]
         used.update(n.id for n in chosen)
         assignments.append(SlotAssignment(
             slot_id=slot_id, node_ids=[n.id for n in chosen], status="filled",
