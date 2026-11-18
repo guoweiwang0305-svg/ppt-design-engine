@@ -39,6 +39,12 @@ uv run ppt-engine render examples/minimal-slide.json --output build/demo.pptx
 uv run ppt-engine export build/demo.pptx --output-dir build/export
 ```
 
+## P0.5 — Information-to-Visual Intelligence
+
+P0.5 adds typed Information Graphs, Visual Grammar contracts, a semantic Visual Pattern Library, transparent multi-candidate ranking, and a structured reference-slide annotation intake. See [P0.5 implementation spec](docs/P0_5_INFORMATION_TO_VISUAL_INTELLIGENCE.md) and run `uv run ppt-engine rank-patterns examples/five-channel-information-graph.json`.
+
+This ranking layer is a deterministic baseline, not a claim of human-level aesthetic judgment. Reference reverse engineering currently consumes structured annotations and checks source-image integrity; automatic OCR/vision extraction is a later adapter.
+
 ## Architecture
 
 `Content → Semantic Design IR → Design Director → Layout Candidates → Optimizer → Renderer → Visual QA → Delivery`
