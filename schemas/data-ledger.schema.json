@@ -1,0 +1,21 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ppt-design-engine/data-ledger.schema.json",
+  "title":"DataLedger",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["entries"],
+  "properties":{"entries":{"type":"object","additionalProperties":{
+    "type":"object","additionalProperties":false,
+    "required":["id","value","unit","definition","source","time"],
+    "properties":{
+      "id":{"type":"string","minLength":1},
+      "value":{"type":["number","integer","string"]},
+      "unit":{"type":"string"},
+      "definition":{"type":"string"},
+      "source":{"type":"string"},
+      "time":{"type":"string"},
+      "context":{"type":"string"}
+    }
+  }}}
+}
