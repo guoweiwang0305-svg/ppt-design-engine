@@ -50,7 +50,7 @@ The Python API is available from `ppt_engine.optimization`. CLI wiring is intent
 The first rule set checks for exactly one thesis node, competing font sizes, and underweighted critical metrics. These are explainable heuristics, not learned saliency or taste judgments. Brand style and narrative intent can legitimately override a numeric warning.
 
 ## Orthogonal connector routing
-`route_relations_orthogonal(ir)` finds a shortest collision-free Manhattan route among direct, two-bend and obstacle-boundary detour candidates. It reports `routed`, `blocked`, or `missing_endpoint`. The route points are returned separately; the renderer does not silently rewrite the DesignIR connector geometry. Complex multi-edge crossings, port selection and global route optimization remain future work.
+`route_relations_orthogonal(ir)` finds a shortest collision-free Manhattan route among direct, two-bend and obstacle-boundary detour candidates. It reports `routed`, `blocked`, or `missing_endpoint`. The route points are consumed by the PPTX renderer as editable straight line segments forming an orthogonal path; the renderer does not rewrite DesignIR connector geometry. If all candidate paths are blocked, it omits that connector rather than drawing through an obstacle. Complex multi-edge crossings, port selection, arrowhead semantics and global route optimization remain future work.
 
 ## Rendered-image recheck
 `critique_slide(ir, rendered_png=...)` adds pixel health checks from the rendered PNG (blankness, global contrast, resolution). This is a post-render sanity check, not OCR or image understanding. It cannot verify text clipping, legibility, aesthetic balance or brand fidelity.
