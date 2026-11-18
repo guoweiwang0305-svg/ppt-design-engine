@@ -157,3 +157,16 @@ uv run ppt-engine optimize-layout build/design_ir/compiled-slide.json \
   --report-output build/qa/visual-critic.json \
   --max-iterations 2
 ```
+
+
+## P0.11.2 — Advanced Visual Critic
+
+Run explainable geometry, hierarchy, relation-routing and density checks, optionally including the rendered PNG pixel audit:
+
+```bash
+uv run ppt-engine advanced-critic build/design_ir/optimized-slide.json \
+  --rendered-png build/export/png/slide-1.png \
+  --output build/qa/advanced-critic.json
+```
+
+Python API: `ppt_engine.advanced_critic.critique_slide`. Geometry repairs are suggestions only; orthogonal routes are returned as proposals and do not silently mutate DesignIR. Density warnings recommend a primary/secondary split but never split or delete content automatically. Human review remains mandatory.
