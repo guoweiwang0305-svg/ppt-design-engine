@@ -1,0 +1,12 @@
+{
+  "pattern_id": "causal.driver_outcome",
+  "name": "Driver → Mechanism → Outcome",
+  "semantic_families": ["causal", "argument", "process"],
+  "relation_types": ["causality", "supports", "sequence"],
+  "min_nodes": 4,
+  "max_nodes": 16,
+  "density": "high",
+  "layouts": ["horizontal_causal_chain", "multi_driver_outcome", "layered_causal_map"],
+  "visual_grammar_ref": "causal_chain",
+  "tags": ["business-report", "drivers", "outcomes", "high-density"]
+}
