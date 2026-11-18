@@ -45,6 +45,19 @@ def audit_design_ir(ir: DesignIR, min_font_pt: float | None = None,
                 code="font_below_minimum", severity="warning", node_ids=[node.id],
                 message=f"Font {node.font_size_pt}pt is below configured minimum {minimum}pt.",
             ))
+        if node.geometry is not None and node.text:
+            unit_scale = 72 if ir.canvas.unit == "in" else (1 if ir.canvas.unit == "pt" else 0.75)
+            width_pt = node.geometry.width * unit_scale
+            height_pt = node.geometry.height * unit_scale
+            chars_per_line = max(1, int(width_pt / max(1, node.font_size_pt * 0.52)))
+            estimated_lines = sum(max(1, (len(line) + chars_per_line - 1) // chars_per_line)
+                                  for line in node.text.splitlines() or [""])
+            available_lines = max(1, int(height_pt / max(1, node.font_size_pt * 1.25)))
+            if estimated_lines > available_lines:
+                issues.append(QAIssue(
+                    code="possible_text_overflow", severity="warning", node_ids=[node.id],
+                    message=f"Estimated {estimated_lines} lines exceed approximate capacity of {available_lines}; inspect rendered text.",
+                ))
     for index, first in enumerate(positioned):
         for second in positioned[index + 1:]:
             overlap = _intersection_area(first.geometry, second.geometry)
