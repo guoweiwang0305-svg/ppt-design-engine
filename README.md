@@ -114,3 +114,25 @@ P0.9B adds a 13-family insurance layout catalog, an analytical-question-first ch
 - `schemas/page-quality-score.schema.json`
 
 See [P0.9B implementation notes](docs/P0_9B_GENERALI_LAYOUT_CHART_ICON_RULES.md). These are candidate design specifications; mined reference pages require individual scoring and human approval before production use.
+
+
+## P0.10A — Reference Page Assetization
+
+The 81-page source corpus (21 GCL + Alleanza pages and 60 AIA training pages) was reopened and reprocessed. The local review package contains per-page feature/score records, a visually inspected 28-page balanced candidate shortlist, page thumbnails and traceable pattern-seed mappings. Scores are heuristic screening aids; candidates remain pending user/expert approval. Source PPTX files and extracted business text are not committed to this repository.
+
+See [P0.10A reference assetization](docs/P0_10A_REFERENCE_ASSETIZATION.md).
+
+## P0.10B — Geometric Layout Compilation
+
+A versioned 16:9 geometry catalog now defines slot rectangles for the 13 Generali insurance layout families. The compiler can map an Information Graph to a slot plan and then to editable DesignIR. Metric nodes must carry DataLedger references. The renderer draws explicit graph relations, and rendered PNGs have a basic pixel-health audit.
+
+```bash
+uv run ppt-engine compile-layout graph.json gen.kpi.executive_dashboard
+uv run ppt-engine validate build/design_ir/compiled-slide.json
+uv run ppt-engine render build/design_ir/compiled-slide.json --output build/slide.pptx
+uv run ppt-engine export build/slide.pptx --output-dir build/export
+uv run ppt-engine audit-design-ir build/design_ir/compiled-slide.json
+uv run ppt-engine audit-rendered-png build/export/png/slide-1.png
+```
+
+See [P0.10B layout compiler](docs/P0_10B_GEOMETRY_LAYOUT_COMPILER.md). Current slot geometry and connector routing are first-pass deterministic scaffolds and still require visual tuning and human acceptance.
