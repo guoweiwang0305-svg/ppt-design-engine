@@ -102,3 +102,15 @@ uv run ppt-engine extract-visual-features build/reference/gcl.json build/referen
 P0.9 adds approximate occupancy/whitespace, weighted visual center, focal dominance, image/text ratios, alignment regularity, typography hierarchy, editable palette and chart/table mix. Similarity is transparent and deterministic (geometry 35%, composition 20%, typography 15%, color 15%, content mix 15%). It is not a learned aesthetic model. Only expert-approved P0.8 patterns with explicit semantic mappings can enter production retrieval.
 
 See docs/P0_9_VISUAL_PATTERN_INTELLIGENCE.md and design_profiles/generali_corporate.json.
+
+
+## P0.9B — Generali Insurance Layout, Chart and Icon Rules
+
+P0.9B adds a 13-family insurance layout catalog, an analytical-question-first chart grammar, a semantic icon registry with provenance/licensing requirements, and a page-quality scoring schema for expert review.
+
+- `visual_patterns/generali/insurance_layout_catalog.json`
+- `visual_rules/charts/insurance_chart_grammar.json`
+- `visual_rules/icons/insurance_icon_registry.json`
+- `schemas/page-quality-score.schema.json`
+
+See [P0.9B implementation notes](docs/P0_9B_GENERALI_LAYOUT_CHART_ICON_RULES.md). These are candidate design specifications; mined reference pages require individual scoring and human approval before production use.
