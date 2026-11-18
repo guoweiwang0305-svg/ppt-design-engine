@@ -77,6 +77,7 @@ class DesignNode(StrictModel):
     evidence_status: EvidenceStatus = EvidenceStatus.UNKNOWN
     reading_order: int = 0
     source_ref: str | None = None
+    data_ref: str | None = None
     geometry: Geometry | None = None
     visual_type: Literal["text", "rect", "ellipse"] = "text"
     font_size_pt: float = Field(default=18, gt=0)
@@ -123,6 +124,8 @@ class DesignIR(StrictModel):
             if relation.from_ not in known or relation.to not in known:
                 raise ValueError(f"Relation {relation.id!r} references an unknown node")
         for node in self.nodes:
+            if node.semantic_role == SemanticRole.METRIC and not node.data_ref:
+                raise ValueError(f"Metric node {node.id!r} must use a DataLedger data_ref")
             if node.geometry:
                 g = node.geometry
                 if g.x + g.width > self.canvas.width or g.y + g.height > self.canvas.height:
