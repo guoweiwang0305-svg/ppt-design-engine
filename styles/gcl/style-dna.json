@@ -1,0 +1,42 @@
+{
+  "style_id":"GCL",
+  "version":"1.0",
+  "positioning":"Global corporate editorial infographic",
+  "density":"high_but_structured",
+  "visual_preference":"diagram_first",
+  "whitespace":"balanced",
+  "brand_direction":"global",
+  "principles":{
+    "shadows":"off_by_default",
+    "gradients":"selective_semantic_use",
+    "cards":"sparingly",
+    "ornament":"semantic_only"
+  },
+  "palette":{
+    "burgundy":"#760823",
+    "red":"#B90E3C",
+    "rose":"#D97891",
+    "pale_rose":"#F5E8EC",
+    "warm_white":"#FCFAFA",
+    "ink":"#282126",
+    "secondary":"#655A60",
+    "line":"#D9CDD1"
+  },
+  "graphic_language":[
+    "structured diagrams",
+    "timelines",
+    "operating models",
+    "strategy maps",
+    "data narratives",
+    "editorial information hierarchy"
+  ],
+  "anti_patterns":[
+    "heavy_drop_shadows",
+    "uniform_rounded_card_grids",
+    "decorative_arrows",
+    "random_iconography",
+    "overuse_of_gradients",
+    "multiple_competing_focal_points",
+    "shrinking_text_to_fit"
+  ]
+}
