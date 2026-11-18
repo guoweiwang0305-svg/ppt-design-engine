@@ -13,6 +13,7 @@ from .pptx_parser import parse_pptx_to_json
 from .mining import PatternReview, apply_pattern_reviews, mine_patterns, save_pattern_review
 from .visual_intelligence import extract_visual_features
 from .production import PageQualityScores, score_page, select_layout, build_layout_plan
+from .visual_qa import audit_design_ir
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
@@ -200,4 +201,19 @@ def build_layout_plan_command(
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(plan.model_dump_json(indent=2), encoding="utf-8")
     typer.echo(f"Layout plan -> {output}")
+\n\n
+
+@app.command("audit-design-ir")
+def audit_design_ir_command(
+    ir_file: Path,
+    output: Path = Path("build/qa/preflight.json"),
+):
+    """Run deterministic geometry/font checks and emit a human visual-QA checklist."""
+    ir = DesignIR.model_validate_json(ir_file.read_text(encoding="utf-8"))
+    report = audit_design_ir(ir)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
+    typer.echo(report.model_dump_json(indent=2))
+    if report.status == "blocked":
+        raise typer.Exit(1)
 \n\nif __name__ == "__main__":\n    app()\n
