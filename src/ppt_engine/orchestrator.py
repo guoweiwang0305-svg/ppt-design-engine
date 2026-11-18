@@ -1,6 +1,5 @@
 """Small, explicit page lifecycle state machine."""
 from __future__ import annotations
-import json
 import os
 from pathlib import Path
 from .models import PageRecord, PageStatus, ProjectState
