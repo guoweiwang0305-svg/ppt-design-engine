@@ -1,0 +1,796 @@
+{
+  "geometry_catalog_id": "generali_insurance_layout_geometry_v1",
+  "canvas": {
+    "width": 13.333,
+    "height": 7.5,
+    "unit": "in"
+  },
+  "layouts": {
+    "gen.kpi.executive_dashboard": {
+      "slots": {
+        "headline_conclusion": {
+          "geometry": {
+            "x": 0.55,
+            "y": 0.28,
+            "width": 12.23,
+            "height": 0.62
+          },
+          "arrangement": "single",
+          "max_items": 1
+        },
+        "primary_kpi": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "secondary_kpis": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "trend_or_mix_evidence": {
+          "geometry": {
+            "x": 0.55,
+            "y": 4.165,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "period_scope_source": {
+          "geometry": {
+            "x": 0.55,
+            "y": 7.08,
+            "width": 12.23,
+            "height": 0.22
+          },
+          "arrangement": "single",
+          "max_items": 1
+        }
+      }
+    },
+    "gen.performance.small_multiples": {
+      "slots": {
+        "comparison_question": {
+          "geometry": {
+            "x": 0.55,
+            "y": 0.28,
+            "width": 12.23,
+            "height": 0.62
+          },
+          "arrangement": "single",
+          "max_items": 1
+        },
+        "shared_unit_and_period": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "small_multiple_panels": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "key_outlier_annotation": {
+          "geometry": {
+            "x": 0.55,
+            "y": 4.165,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "source": {
+          "geometry": {
+            "x": 0.55,
+            "y": 7.08,
+            "width": 12.23,
+            "height": 0.22
+          },
+          "arrangement": "single",
+          "max_items": 1
+        }
+      }
+    },
+    "gen.market.ranking": {
+      "slots": {
+        "market_scope": {
+          "geometry": {
+            "x": 0.55,
+            "y": 0.28,
+            "width": 12.23,
+            "height": 0.62
+          },
+          "arrangement": "single",
+          "max_items": 1
+        },
+        "ranked_entities": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "focal_company_highlight": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "rank_change": {
+          "geometry": {
+            "x": 0.55,
+            "y": 4.165,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "source_and_definition": {
+          "geometry": {
+            "x": 0.55,
+            "y": 7.08,
+            "width": 12.23,
+            "height": 0.22
+          },
+          "arrangement": "single",
+          "max_items": 1
+        }
+      }
+    },
+    "gen.geo.regional_presence": {
+      "slots": {
+        "geographic_scope": {
+          "geometry": {
+            "x": 0.55,
+            "y": 0.28,
+            "width": 12.23,
+            "height": 0.62
+          },
+          "arrangement": "single",
+          "max_items": 1
+        },
+        "map_or_region_grid": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "regional_metrics": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "callouts": {
+          "geometry": {
+            "x": 0.55,
+            "y": 4.165,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "source": {
+          "geometry": {
+            "x": 0.55,
+            "y": 7.08,
+            "width": 12.23,
+            "height": 0.22
+          },
+          "arrangement": "single",
+          "max_items": 1
+        }
+      }
+    },
+    "gen.customer.segmentation": {
+      "slots": {
+        "segmentation_basis": {
+          "geometry": {
+            "x": 0.55,
+            "y": 0.28,
+            "width": 12.23,
+            "height": 0.62
+          },
+          "arrangement": "single",
+          "max_items": 1
+        },
+        "segment_axes": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "segment_clusters": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "needs_and_value": {
+          "geometry": {
+            "x": 0.55,
+            "y": 4.165,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "recommended_proposition": {
+          "geometry": {
+            "x": 6.785,
+            "y": 4.165,
+            "width": 5.995,
+            "height": 2.835
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "evidence": {
+          "geometry": {
+            "x": 0.55,
+            "y": 7.08,
+            "width": 12.23,
+            "height": 0.22
+          },
+          "arrangement": "single",
+          "max_items": 1
+        }
+      }
+    },
+    "gen.customer.tagging": {
+      "slots": {
+        "customer_universe": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "tag_dimensions": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "tag_examples": {
+          "geometry": {
+            "x": 0.55,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "signal_to_need_mapping": {
+          "geometry": {
+            "x": 6.785,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "action_output": {
+          "geometry": {
+            "x": 0.55,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        }
+      }
+    },
+    "gen.channel.omo_loop": {
+      "slots": {
+        "customer_trigger": {
+          "geometry": {
+            "x": 0.55,
+            "y": 0.28,
+            "width": 12.23,
+            "height": 0.62
+          },
+          "arrangement": "single",
+          "max_items": 1
+        },
+        "digital_touchpoints": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "human_touchpoints": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "handoff_rules": {
+          "geometry": {
+            "x": 0.55,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "conversion_events": {
+          "geometry": {
+            "x": 6.785,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "feedback_data": {
+          "geometry": {
+            "x": 0.55,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "owner": {
+          "geometry": {
+            "x": 6.785,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        }
+      }
+    },
+    "gen.ecosystem.value_exchange": {
+      "slots": {
+        "central_customer_or_platform": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "actor_clusters": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "value_flows": {
+          "geometry": {
+            "x": 0.55,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "data_flows": {
+          "geometry": {
+            "x": 6.785,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "service_flows": {
+          "geometry": {
+            "x": 0.55,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "governance_or_owner": {
+          "geometry": {
+            "x": 6.785,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        }
+      }
+    },
+    "gen.strategy.pillars": {
+      "slots": {
+        "strategic_ambition": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "pillars": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "capabilities": {
+          "geometry": {
+            "x": 0.55,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "initiatives": {
+          "geometry": {
+            "x": 6.785,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "outcome_kpis": {
+          "geometry": {
+            "x": 0.55,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "enablers": {
+          "geometry": {
+            "x": 6.785,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        }
+      }
+    },
+    "gen.product.lifecycle_matrix": {
+      "slots": {
+        "life_stage_axis": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "need_axis": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "product_or_service_mapping": {
+          "geometry": {
+            "x": 0.55,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "coverage_gaps": {
+          "geometry": {
+            "x": 6.785,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "source_and_qualification": {
+          "geometry": {
+            "x": 0.55,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        }
+      }
+    },
+    "gen.health.ecosystem": {
+      "slots": {
+        "customer_need": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "lifecycle_stage": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "service_provider_clusters": {
+          "geometry": {
+            "x": 0.55,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "access_route": {
+          "geometry": {
+            "x": 6.785,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "insurance_link": {
+          "geometry": {
+            "x": 0.55,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "service_outcome": {
+          "geometry": {
+            "x": 6.785,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        }
+      }
+    },
+    "gen.operating.causal_tree": {
+      "slots": {
+        "outcome_or_problem": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "primary_drivers": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "secondary_drivers": {
+          "geometry": {
+            "x": 0.55,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "evidence": {
+          "geometry": {
+            "x": 0.55,
+            "y": 7.08,
+            "width": 12.23,
+            "height": 0.22
+          },
+          "arrangement": "single",
+          "max_items": 1
+        },
+        "controllable_levers": {
+          "geometry": {
+            "x": 6.785,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "owner": {
+          "geometry": {
+            "x": 0.55,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        }
+      }
+    },
+    "gen.financial.bridge": {
+      "slots": {
+        "starting_value": {
+          "geometry": {
+            "x": 0.55,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "positive_drivers": {
+          "geometry": {
+            "x": 6.785,
+            "y": 1.15,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "negative_drivers": {
+          "geometry": {
+            "x": 0.55,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "grid",
+          "max_items": 6
+        },
+        "ending_value": {
+          "geometry": {
+            "x": 6.785,
+            "y": 3.1599999999999997,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "reconciliation": {
+          "geometry": {
+            "x": 0.55,
+            "y": 5.17,
+            "width": 5.995,
+            "height": 1.8299999999999998
+          },
+          "arrangement": "stack",
+          "max_items": 1
+        },
+        "source": {
+          "geometry": {
+            "x": 0.55,
+            "y": 7.08,
+            "width": 12.23,
+            "height": 0.22
+          },
+          "arrangement": "single",
+          "max_items": 1
+        }
+      }
+    }
+  },
+  "limitations": [
+    "Geometry is a first-pass normalized layout scaffold, not a pixel-perfect reconstruction of each source slide.",
+    "Visual review and renderer QA are required before delivery."
+  ]
+}
