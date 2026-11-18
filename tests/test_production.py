@@ -10,7 +10,7 @@ def sample_graph():
         graph_id="g1",
         thesis="经营增长由客户、渠道和产品共同驱动",
         nodes=[
-            InformationNode(id="n1", label="经营增长", kind="outcome"),
+            InformationNode(id="n1", label="经营增长", kind="driver"),
             InformationNode(id="n2", label="客户经营", kind="driver"),
             InformationNode(id="n3", label="渠道效率", kind="driver"),
             InformationNode(id="n4", label="产品结构", kind="driver"),
