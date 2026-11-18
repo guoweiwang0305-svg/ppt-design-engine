@@ -9,7 +9,7 @@ import json
 import re
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import Field
 
@@ -46,7 +46,7 @@ class MinedPattern(StrictModel):
 
 class PatternReview(StrictModel):
     pattern_id: str
-    decision: str
+    decision: Literal["accept", "reject", "revise"]
     reviewer: str = "expert"
     reason_codes: list[str] = Field(default_factory=list)
     notes: str = ""
