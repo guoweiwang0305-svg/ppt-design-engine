@@ -1,0 +1,12 @@
+{
+  "pattern_id": "network.ecosystem",
+  "name": "Business Ecosystem",
+  "semantic_families": ["network", "composition", "causal"],
+  "relation_types": ["network", "composition", "causality", "supports"],
+  "min_nodes": 5,
+  "max_nodes": 22,
+  "density": "high",
+  "layouts": ["layered_network", "clustered_network", "asymmetric_radial"],
+  "visual_grammar_ref": "ecosystem_map",
+  "tags": ["business-report", "stakeholders", "channels", "ecosystem"]
+}
