@@ -1,0 +1,46 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ppt-design-engine/design-ir.schema.json",
+  "title":"Design IR",
+  "type":"object",
+  "required":["deck_id","slide_id","canvas","message","nodes","relations","constraints"],
+  "properties":{
+    "deck_id":{"type":"string"},
+    "slide_id":{"type":"string"},
+    "canvas":{"type":"object","required":["width","height","unit"],"properties":{
+      "width":{"type":"number","exclusiveMinimum":0},
+      "height":{"type":"number","exclusiveMinimum":0},
+      "unit":{"enum":["in","pt","px"]}
+    }},
+    "message":{"type":"object","required":["thesis"],"properties":{
+      "thesis":{"type":"string"},
+      "audience":{"type":"string"},
+      "purpose":{"type":"string"},
+      "reading_path":{"type":"array","items":{"type":"string"}}
+    }},
+    "nodes":{"type":"array","items":{"type":"object","required":["id","text","semantic_role","importance"],"properties":{
+      "id":{"type":"string"},
+      "text":{"type":"string"},
+      "semantic_role":{"enum":["thesis","evidence","metric","category","action","context","caveat","label"]},
+      "importance":{"enum":["critical","high","medium","low"]},
+      "evidence_status":{"enum":["verified","user_supplied","illustrative","unknown"]},
+      "reading_order":{"type":"integer"},
+      "source_ref":{"type":["string","null"]}
+    }}},
+    "relations":{"type":"array","items":{"type":"object","required":["id","from","to","relation_type"],"properties":{
+      "id":{"type":"string"},
+      "from":{"type":"string"},
+      "to":{"type":"string"},
+      "relation_type":{"enum":["sequence","hierarchy","comparison","causality","cycle","network","composition","distribution","supports","handoff"]},
+      "direction":{"enum":["forward","reverse","bidirectional","none"]},
+      "label":{"type":"string"}
+    }}},
+    "constraints":{"type":"object","properties":{
+      "density":{"enum":["low","medium","high"]},
+      "min_font_pt":{"type":"number"},
+      "style_dna_ref":{"type":"string"},
+      "allow_gradients":{"type":"boolean"},
+      "allow_shadows":{"type":"boolean"}
+    }}
+  }
+}
