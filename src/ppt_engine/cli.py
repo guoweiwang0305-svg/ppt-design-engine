@@ -13,7 +13,7 @@ from .pptx_parser import parse_pptx_to_json
 from .mining import PatternReview, apply_pattern_reviews, mine_patterns, save_pattern_review
 from .visual_intelligence import extract_visual_features
 from .production import PageQualityScores, score_page, select_layout, build_layout_plan, layout_plan_to_design_ir
-from .visual_qa import audit_design_ir
+from .visual_qa import audit_design_ir, audit_rendered_png
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
@@ -258,6 +258,20 @@ def compile_layout_command(
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(ir.model_dump_json(indent=2, by_alias=True), encoding="utf-8")
     typer.echo(f"Compiled {ir.slide_id}: {len(ir.nodes)} nodes, {len(ir.relations)} relations -> {output}")
+
+
+@app.command("audit-rendered-png")
+def audit_rendered_png_command(
+    image_file: Path,
+    output: Path = Path("build/qa/rendered-image-audit.json"),
+):
+    """Measure basic pixel health of a rendered PNG; human visual inspection remains required."""
+    report = audit_rendered_png(str(image_file))
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
+    typer.echo(report.model_dump_json(indent=2))
+    if report.status == "blocked":
+        raise typer.Exit(1)
 
 
 if __name__ == "__main__":
