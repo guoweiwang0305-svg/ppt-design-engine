@@ -52,3 +52,16 @@ def test_critic_reports_density_and_hierarchy():
     assert report.human_review_required
     assert report.page_split is not None
     assert report.routed_relations[0].status=="routed"
+
+
+def test_critic_flags_unsafe_margin_and_alignment_drift():
+    ir=fixture()
+    ir.nodes[1].geometry=Geometry(x=0.04,y=2,width=2,height=1)
+    ir.nodes.append(DesignNode(id="c",text="Third",semantic_role=SemanticRole.CONTEXT,
+        geometry=Geometry(x=1.18,y=3.4,width=2,height=0.5),font_size_pt=14))
+    ir.nodes.append(DesignNode(id="d",text="Fourth",semantic_role=SemanticRole.CONTEXT,
+        geometry=Geometry(x=1.25,y=4.1,width=2,height=0.5),font_size_pt=14))
+    report=critique_slide(ir)
+    codes={finding["code"] for finding in report.findings}
+    assert "unsafe_canvas_margin" in codes
+    assert "alignment_drift" in codes
