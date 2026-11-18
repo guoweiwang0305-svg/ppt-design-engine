@@ -66,9 +66,6 @@ def ledger_check(ledger_file: Path, refs_file: Path):
     typer.echo("DataLedger references valid")
 
 
-if __name__ == "__main__":
-    app()
-
 
 @app.command("parse-pptx")
 def parse_pptx_command(
@@ -145,3 +142,7 @@ def extract_visual_features_command(
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(features, ensure_ascii=False, indent=2), encoding="utf-8")
     typer.echo(f"Extracted {len(features)} slide feature vectors -> {output}")
+
+
+if __name__ == "__main__":
+    app()
