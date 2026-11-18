@@ -278,7 +278,7 @@ def optimize_layout_command(
 @app.command("advanced-critic")
 def advanced_critic_command(
     ir_file: Path,
-    rendered_png: Path = typer.Option(None, help="Optional rendered PNG for pixel-level post-render audit."),
+    rendered_png: Path | None = typer.Option(None, help="Optional rendered PNG for pixel-level post-render audit."),
     output: Path = Path("build/qa/advanced-critic.json"),
 ):
     """Run hierarchy, collision, connector-routing and density diagnostics."""
