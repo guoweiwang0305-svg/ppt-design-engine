@@ -7,7 +7,8 @@ from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.util import Inches, Pt
-from .models import DesignIR\nfrom .ledger import DataLedger
+from .models import DesignIR
+from .ledger import DataLedger
 
 
 def _rgb(value: str) -> RGBColor:
