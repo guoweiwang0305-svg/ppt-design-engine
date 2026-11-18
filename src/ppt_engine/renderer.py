@@ -7,7 +7,7 @@ from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.util import Inches, Pt
-from .models import DesignIR
+from .models import DesignIR\nfrom .ledger import DataLedger
 
 
 def _rgb(value: str) -> RGBColor:
@@ -17,7 +17,7 @@ def _rgb(value: str) -> RGBColor:
     return RGBColor(*(int(raw[i:i+2], 16) for i in (0, 2, 4)))
 
 
-def render_pptx(ir: DesignIR, output: str | Path) -> Path:
+def render_pptx(ir: DesignIR, output: str | Path, ledger: DataLedger | None = None) -> Path:
     output = Path(output)
     output.parent.mkdir(parents=True, exist_ok=True)
     prs = Presentation()
@@ -53,7 +53,7 @@ def render_pptx(ir: DesignIR, output: str | Path) -> Path:
         p = frame.paragraphs[0]
         p.alignment = {"left": PP_ALIGN.LEFT, "center": PP_ALIGN.CENTER, "right": PP_ALIGN.RIGHT}[node.align]
         run = p.add_run()
-        run.text = node.text
+        if node.data_ref:\n            if ledger is None:\n                raise ValueError(f"Node {node.id!r} references {node.data_ref!r}; provide a DataLedger")\n            entry = ledger.resolve(node.data_ref)\n            run.text = f"{entry.value} {entry.unit}".strip()\n        else:\n            run.text = node.text
         run.font.size = Pt(node.font_size_pt)
         run.font.color.rgb = _rgb(node.color)
         run.font.name = "Aptos"
