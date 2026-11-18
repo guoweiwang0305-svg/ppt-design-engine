@@ -1,0 +1,12 @@
+{
+  "deck_id":"demo-deck",
+  "slide_id":"s01",
+  "canvas":{"width":13.333,"height":7.5,"unit":"in"},
+  "message":{"thesis":"A strong slide starts with one clear business message","audience":"Executive","purpose":"Explain the design principle","reading_path":["title","support"]},
+  "nodes":[
+    {"id":"title","text":"Design the message, not the decoration","semantic_role":"thesis","importance":"critical","evidence_status":"user_supplied","reading_order":1,"geometry":{"x":0.8,"y":0.65,"width":11.7,"height":1.0},"font_size_pt":28,"color":"#760823"},
+    {"id":"support","text":"Use semantic structure, readable hierarchy and evidence-led visuals.","semantic_role":"evidence","importance":"high","evidence_status":"unknown","reading_order":2,"geometry":{"x":0.9,"y":2.0,"width":10.8,"height":1.2},"font_size_pt":20,"color":"#282126"}
+  ],
+  "relations":[{"id":"r1","from":"title","to":"support","relation_type":"supports","direction":"forward","label":"explains"}],
+  "constraints":{"density":"medium","min_font_pt":14,"style_dna_ref":"GCL","allow_gradients":false,"allow_shadows":false}
+}
