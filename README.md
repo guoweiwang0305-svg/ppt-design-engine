@@ -150,3 +150,10 @@ P0.11 adds a bounded, explainable optimizer and critic API:
 - Human visual review remains mandatory; pixel metrics are not treated as visual understanding.
 
 See [P0.11 Layout Optimization & Visual Critic](docs/P0_11_LAYOUT_OPTIMIZATION_VISUAL_CRITIC.md). API: `ppt_engine.optimization.optimize_layout`.
+
+```bash
+uv run ppt-engine optimize-layout build/design_ir/compiled-slide.json \
+  --output build/design_ir/optimized-slide.json \
+  --report-output build/qa/visual-critic.json \
+  --max-iterations 2
+```
