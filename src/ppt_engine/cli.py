@@ -212,7 +212,7 @@ def audit_design_ir_command(
     typer.echo(report.model_dump_json(indent=2))
     if report.status == "blocked":
         raise typer.Exit(1)
-\n\nif __name__ == "__main__":\n    app()\n
+
 
 @app.command("compile-layout")
 def compile_layout_command(
