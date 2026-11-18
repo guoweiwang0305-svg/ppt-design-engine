@@ -9,7 +9,7 @@ from typing import Literal
 from pydantic import Field
 
 from .models import DesignIR, StrictModel
-from .visual_qa import QAIssue, VisualQAReport, audit_design_ir
+from .visual_qa import VisualQAReport, audit_design_ir
 
 
 class RepairAction(StrictModel):
