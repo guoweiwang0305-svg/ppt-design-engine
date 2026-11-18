@@ -2,25 +2,50 @@
 
 A local-first, AI-assisted presentation design engine for high-end, information-dense, diagram-first business presentations.
 
-## Product thesis
+## P0 implementation status
 
-PPT Design Engine is not a template generator. It separates **design intelligence** from **rendering**:
+Implemented:
+- Python package + `uv` dependency management + Typer CLI
+- Pydantic v2 Design IR models and JSON Schema contract
+- Page lifecycle state machine with persisted project state
+- DataLedger registration, lookup, unknown-reference checks and cross-slide value consistency helper
+- Native editable PPTX renderer for text, rectangles and ellipses
+- LibreOffice PDF export and Poppler per-page PNG export adapters
+- Pytest suite and GitHub Actions CI
 
-`Content → Semantic Design IR → Design Director → Layout Candidates → Optimizer → Renderer → Visual QA → Delivery`
+Not yet implemented:
+- Full-deck composition and page sequencing
+- Native chart rendering, image placement/cropping and connector routing
+- Automated visual critique / perceptual QA
+- Agent provider integration
+- Pitch API adapter
+- robust concurrent project locking and migration tooling
 
-The core design model is renderer-independent. Pitch is supported as an editor/collaboration backend, while native PPTX is the primary delivery backend.
+## Quick start
+
+Requirements: Python 3.12 recommended, `uv`. For PDF/PNG export also install LibreOffice and Poppler.
+
+```bash
+uv sync --extra dev
+uv run ppt-engine --help
+uv run pytest
+```
+
+Validate and render a Design IR page:
+
+```bash
+uv run ppt-engine validate examples/minimal-slide.json
+uv run ppt-engine render examples/minimal-slide.json --output build/demo.pptx
+uv run ppt-engine export build/demo.pptx --output-dir build/export
+```
 
 ## Architecture
 
-- **Content Architect** — research, evidence, narrative, page thesis.
-- **Design Director** — autonomous visual/design decisions.
-- **Layout Intelligence** — semantic layout generation and ranking.
-- **Renderer Hub** — native PPTX + Pitch adapters.
-- **Visual QA** — perceptual and deterministic checks.
-- **Orchestrator** — state, versions, retries and acceptance.
-- **Style DNA** — reusable visual systems such as GCL.
+`Content → Semantic Design IR → Design Director → Layout Candidates → Optimizer → Renderer → Visual QA → Delivery`
 
-## Engineering principles
+The Design IR is the canonical renderer-independent representation. AI makes semantic and aesthetic decisions; deterministic code validates schemas, data references, geometry and export integrity.
+
+## Design principles
 
 1. Logic before decoration.
 2. Information relationship before template selection.
@@ -28,13 +53,12 @@ The core design model is renderer-independent. Pitch is supported as an editor/c
 4. Rendered output is the visual source of truth.
 5. QA can reject a page.
 6. Never solve density by shrinking type first.
-7. Gradients and shadows are semantic tools, not automatic “premium” effects.
+7. Gradients and shadows are semantic tools, not automatic premium effects.
 8. A layout candidate must be structurally different, not merely recolored.
 
-## Initial roadmap
+## Environment notes
 
-M0 foundation → M1 semantic Design IR → M2 layout intelligence → M3 native PPTX renderer → M4 Pitch adapter → M5 perceptual QA → M6 preference learning.
-
-## Repository status
-
-This repository is intentionally being built as a real engineering system. The first commit establishes the architecture contracts and GCL design DNA; implementation follows behind stable interfaces.
+- PPTX rendering uses `python-pptx`.
+- PDF conversion invokes `libreoffice` or `soffice`.
+- PNG conversion invokes `pdftoppm` from Poppler.
+- PDF/PNG export reports a clear dependency error when these executables are absent.
