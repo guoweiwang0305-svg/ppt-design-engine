@@ -1,0 +1,210 @@
+{
+  "library_id": "insurance_chart_grammar_v1",
+  "decision_pipeline": [
+    "analytical_question",
+    "data_shape",
+    "comparison_scope",
+    "chart_family",
+    "encoding",
+    "labels",
+    "integrity_checks",
+    "source_note"
+  ],
+  "global_rules": {
+    "every_chart_requires": [
+      "title_as_insight_or_question",
+      "unit",
+      "time_period",
+      "population_or_scope",
+      "source"
+    ],
+    "direct_label_priority": true,
+    "legend_max_series_before_split": 4,
+    "avoid_3d": true,
+    "avoid_dual_axis_unless_two_distinct_units_are_essential": true,
+    "red_reserved_for_focal_series": true,
+    "neutral_context_series": [
+      "#D9D9D9",
+      "#A6A6A6",
+      "#666666"
+    ],
+    "forecast_encoding": "dashed line or lighter tint plus explicit forecast label",
+    "target_encoding": "thin reference line with label",
+    "actual_encoding": "solid primary marks",
+    "missing_data": "show gap or explicit n/a; never silently interpolate"
+  },
+  "rules": [
+    {
+      "question": "How did a metric change over time?",
+      "chart": "line_or_column",
+      "data_shape": "ordered time series",
+      "encoding": "time on x; value on y; focal series red; historical comparators neutral",
+      "labels": "latest value, start/end values, material inflection points",
+      "integrity": [
+        "consistent time interval",
+        "avoid truncated bar-chart axes without explicit analytical reason"
+      ]
+    },
+    {
+      "question": "Which categories contribute most?",
+      "chart": "sorted_horizontal_bar",
+      "data_shape": "categorical values",
+      "encoding": "descending order; one focal category red",
+      "labels": "direct value labels; unit in axis/title",
+      "integrity": [
+        "categories mutually exclusive where summed",
+        "show total or denominator when share is used"
+      ]
+    },
+    {
+      "question": "What is the composition of a total?",
+      "chart": "stacked_bar_or_100_percent_bar",
+      "data_shape": "parts of whole",
+      "encoding": "stable category colors across pages",
+      "labels": "segment value/share if legible; total label",
+      "integrity": [
+        "parts reconcile to total or disclose rounding/residual",
+        "do not use 100% stack when absolute scale matters"
+      ]
+    },
+    {
+      "question": "How do groups differ across multiple metrics?",
+      "chart": "small_multiples_or_heatmap",
+      "data_shape": "matrix or repeated comparisons",
+      "encoding": "shared scale for comparable metrics; otherwise label scale per panel",
+      "labels": "cell values or outlier labels",
+      "integrity": [
+        "normalization method explicit",
+        "missing values distinct from zero"
+      ]
+    },
+    {
+      "question": "How do we rank entities?",
+      "chart": "horizontal_bar_or_lollipop",
+      "data_shape": "ranked categories",
+      "encoding": "sort by metric; focal entity red; others grey",
+      "labels": "rank and actual metric value",
+      "integrity": [
+        "population, period, ranking definition and source present"
+      ]
+    },
+    {
+      "question": "Where are operations or customers located?",
+      "chart": "choropleth_plus_ranked_bar",
+      "data_shape": "geographic regions with numeric measure",
+      "encoding": "sequential intensity for one measure; separate callout for second measure",
+      "labels": "region name and value for priority regions",
+      "integrity": [
+        "legend bins and geographic scope visible",
+        "area not confused with magnitude"
+      ]
+    },
+    {
+      "question": "What explains the change from A to B?",
+      "chart": "waterfall",
+      "data_shape": "start, signed deltas, end",
+      "encoding": "positive/negative/total roles distinct; start/end neutral, key driver red",
+      "labels": "each delta and final total",
+      "integrity": [
+        "arithmetic reconciliation within rounding tolerance"
+      ]
+    },
+    {
+      "question": "Where are customer segments positioned by value and need?",
+      "chart": "2x2_or_bubble_matrix",
+      "data_shape": "two quantitative axes plus optional third variable",
+      "encoding": "axes named; bubble size encodes only one additional variable",
+      "labels": "segment names; quadrants have actionable meaning",
+      "integrity": [
+        "axis definitions and units explicit",
+        "bubble area, not radius, encodes magnitude"
+      ]
+    },
+    {
+      "question": "What is the conversion through a journey?",
+      "chart": "funnel_or_stage_conversion",
+      "data_shape": "sequential stage counts",
+      "encoding": "stage order; count and stage-to-stage conversion",
+      "labels": "n and conversion percentage with denominator",
+      "integrity": [
+        "stage populations nested or non-nested flow explained",
+        "no funnel for non-sequential categories"
+      ]
+    },
+    {
+      "question": "How do channels work together?",
+      "chart": "swimlane_journey_or_service_blueprint",
+      "data_shape": "sequence across customer/frontstage/backstage/channel lanes",
+      "encoding": "lanes represent actors or channels; arrows represent handoffs",
+      "labels": "owner, trigger, event, data feedback",
+      "integrity": [
+        "distinguish sequence from hierarchy",
+        "every handoff has source and destination"
+      ]
+    }
+  ],
+  "insurance_metric_dictionary": {
+    "gross_written_premium": {
+      "unit": "currency",
+      "required_context": [
+        "gross/net",
+        "written/earned",
+        "period",
+        "currency",
+        "scope"
+      ]
+    },
+    "operating_result": {
+      "unit": "currency",
+      "required_context": [
+        "business_segment",
+        "period",
+        "accounting_basis"
+      ]
+    },
+    "combined_ratio": {
+      "unit": "percent",
+      "required_context": [
+        "P&C scope",
+        "discounted/undiscounted",
+        "period"
+      ]
+    },
+    "new_business_margin": {
+      "unit": "percent",
+      "required_context": [
+        "PVNBP or other denominator",
+        "product scope",
+        "period"
+      ]
+    },
+    "solvency_ratio": {
+      "unit": "percent",
+      "required_context": [
+        "regulatory regime",
+        "group/entity",
+        "period_end"
+      ]
+    },
+    "persistency": {
+      "unit": "percent",
+      "required_context": [
+        "cohort",
+        "policy duration",
+        "premium or policy count basis"
+      ]
+    }
+  },
+  "qa_checks": [
+    "chart has an answer-bearing title",
+    "all values have units",
+    "time and population scope visible",
+    "source traceable",
+    "color mapping stable across deck",
+    "labels do not collide",
+    "axes and baselines are not misleading",
+    "waterfall reconciles",
+    "forecast and actual distinguishable",
+    "data references resolve to DataLedger"
+  ]
+}
