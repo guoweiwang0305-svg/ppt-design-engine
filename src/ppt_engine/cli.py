@@ -9,6 +9,7 @@ from .ledger import DataLedger
 from .models import DesignIR, PageStatus
 from .orchestrator import Orchestrator
 from .renderer import export_pdf, export_pngs, render_pptx
+from .pptx_parser import parse_pptx_to_json
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
@@ -65,6 +66,15 @@ def ledger_check(ledger_file: Path, refs_file: Path):
 
 if __name__ == "__main__":
     app()
+
+
+@app.command("parse-pptx")
+def parse_pptx_command(
+    pptx_file: Path,
+    output: Path = Path("build/reference/reference.json"),
+):
+    """Extract editable slide elements, geometry, text styles and connectors from PPTX."""
+    typer.echo(str(parse_pptx_to_json(pptx_file, output)))
 
 
 @app.command("rank-patterns")
