@@ -1,6 +1,5 @@
 """Single-source-of-truth numeric ledger and cross-slide consistency checks."""
 from __future__ import annotations
-import json
 from pathlib import Path
 from pydantic import Field
 from .models import StrictModel
@@ -45,7 +44,7 @@ class DataLedger(StrictModel):
         target.write_text(self.model_dump_json(indent=2), encoding="utf-8")
 
     @classmethod
-    def load(cls, path: str | Path) -> "DataLedger":
+    def load(cls, path: str | Path) -> DataLedger:
         return cls.model_validate_json(Path(path).read_text(encoding="utf-8"))
 
 
