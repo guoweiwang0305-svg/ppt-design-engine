@@ -163,7 +163,7 @@ def parse_pptx(path: str | Path) -> dict[str, Any]:
                         element_id=element["element_id"], kind=kind,
                         bbox=BoundingBox(**bbox), text=text or None,
                         parent_group=parent_group, z_index=element["z_index"],
-                        visual_weight=0.5, is_decorative=not bool(text.strip()) and kind in {"shape", "image"},
+                        visual_weight=0.5, is_decorative=False,
                         confidence=1.0,
                     ))
                 if shape.shape_type == MSO_SHAPE_TYPE.GROUP:
