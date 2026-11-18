@@ -136,3 +136,17 @@ uv run ppt-engine audit-rendered-png build/export/png/slide-1.png
 ```
 
 See [P0.10B layout compiler](docs/P0_10B_GEOMETRY_LAYOUT_COMPILER.md). Current slot geometry and connector routing are first-pass deterministic scaffolds and still require visual tuning and human acceptance.
+
+
+## P0.11 — Layout Optimization & Visual Critic
+
+P0.11 adds a bounded, explainable optimizer and critic API:
+
+- `optimize_layout(ir, max_iterations=2)` performs conservative text-fit adjustments only, never crossing the configured minimum font size.
+- The critic diagnoses missing geometry, overlap, likely text overflow, undersized type and crude focal-area dominance.
+- Every automatic repair records node ID, before/after values and rationale.
+- Overlaps are reported for deliberate re-layout; nodes are not silently moved because that can break relation geometry and reading order.
+- Copy, facts, metrics, source references, semantic relations and reading order are not rewritten by the optimizer.
+- Human visual review remains mandatory; pixel metrics are not treated as visual understanding.
+
+See [P0.11 Layout Optimization & Visual Critic](docs/P0_11_LAYOUT_OPTIMIZATION_VISUAL_CRITIC.md). API: `ppt_engine.optimization.optimize_layout`.
