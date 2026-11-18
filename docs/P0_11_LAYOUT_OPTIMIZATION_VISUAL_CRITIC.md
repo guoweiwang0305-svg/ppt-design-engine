@@ -74,3 +74,27 @@ uv run ppt-engine advanced-critic build/design_ir/optimized-slide.json \
 
 ## Known limits
 No OCR/VLM, no image segmentation, no true font metrics, no global multi-edge routing, no semantic text compression, no deck-level rhythm model. The area occupancy measure is a summed bounding-box proxy and may double-count overlaps.
+
+
+## P0.11.3 — End-to-end quality loop
+
+The `quality-loop` command runs a bounded pass from DesignIR to final rendered assets:
+
+```bash
+uv run ppt-engine quality-loop build/design_ir/compiled-slide.json \
+  --output-dir build/quality \
+  --max-rounds 4
+```
+
+For metric nodes backed by DataLedger:
+
+```bash
+uv run ppt-engine quality-loop build/design_ir/compiled-slide.json \
+  --output-dir build/quality \
+  --max-rounds 4 \
+  --ledger-file build/data_ledger.json
+```
+
+The loop applies only conservative text-fit font adjustments (one point per round, bounded by the minimum font size), then renders editable PPTX, exports PDF/PNG, and runs the advanced critic against the rendered PNG. It writes the final DesignIR and a complete quality-loop report. Geometry proposals, page splits and content changes remain review tasks; they are not auto-applied.
+
+Required local executables for export: LibreOffice and Poppler `pdftoppm`. If export is unavailable, the CLI reports the dependency failure rather than claiming a complete visual review.
