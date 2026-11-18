@@ -236,5 +236,29 @@ def compile_layout_command(
     typer.echo(f"Compiled {ir.slide_id}: {len(ir.nodes)} nodes, {len(ir.relations)} relations -> {output}")
 
 
+
+
+@app.command("compile-layout")
+def compile_layout_command(
+    graph_file: Path,
+    pattern_id: str,
+    catalog_file: Path = Path("visual_patterns/generali/insurance_layout_catalog.json"),
+    geometry_file: Path = Path("visual_patterns/generali/layout_geometry.json"),
+    output: Path = Path("build/design_ir/compiled-slide.json"),
+    min_font_pt: float = 12,
+):
+    """Resolve semantic slots into editable DesignIR using versioned geometry tokens."""
+    graph = InformationGraph.model_validate_json(graph_file.read_text(encoding="utf-8"))
+    catalog = json.loads(catalog_file.read_text(encoding="utf-8"))
+    geometry = json.loads(geometry_file.read_text(encoding="utf-8"))
+    plan = build_layout_plan(graph, catalog, pattern_id, geometry_catalog=geometry)
+    if plan.geometry_status != "resolved":
+        raise typer.BadParameter("Layout geometry is incomplete: " + "; ".join(plan.warnings))
+    ir = layout_plan_to_design_ir(graph, plan, min_font_pt=min_font_pt)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(ir.model_dump_json(indent=2, by_alias=True), encoding="utf-8")
+    typer.echo(f"Compiled {ir.slide_id}: {len(ir.nodes)} nodes, {len(ir.relations)} relations -> {output}")
+
+
 if __name__ == "__main__":
     app()
