@@ -144,5 +144,6 @@ def extract_visual_features_command(
     typer.echo(f"Extracted {len(features)} slide feature vectors -> {output}")
 
 
+
 if __name__ == "__main__":
     app()
