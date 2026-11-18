@@ -1,0 +1,121 @@
+{
+  "registry_id": "insurance_icon_registry_v1",
+  "policy": "Semantic-first, consistent family; no decorative one-off icons.",
+  "style_tokens": {
+    "default_family": "outline",
+    "stroke_width_pt": {
+      "small": 1.5,
+      "medium": 1.75,
+      "large": 2
+    },
+    "corner_style": "rounded_or_optically_consistent",
+    "viewbox": "24x24",
+    "minimum_display_size_pt": 14,
+    "preferred_display_size_pt": [
+      18,
+      28
+    ],
+    "color_roles": {
+      "default": "#555555",
+      "active": "#C00000",
+      "muted": "#A6A6A6",
+      "on_dark": "#FFFFFF"
+    },
+    "filled_icon_rule": "Use filled variant only for active state or one primary focal symbol; never mix filled and outline arbitrarily"
+  },
+  "semantic_categories": {
+    "customer": [
+      "customer_individual",
+      "family",
+      "retiree",
+      "business_owner"
+    ],
+    "protection": [
+      "life_protection",
+      "health_protection",
+      "accident_protection",
+      "critical_illness",
+      "long_term_care"
+    ],
+    "wealth": [
+      "savings",
+      "retirement",
+      "wealth_transfer",
+      "investment",
+      "cash_flow"
+    ],
+    "channels": [
+      "advisor",
+      "branch",
+      "mobile_app",
+      "web_portal",
+      "call_center",
+      "partner_channel"
+    ],
+    "journey": [
+      "discover",
+      "consult",
+      "apply",
+      "underwrite",
+      "policy_issue",
+      "service",
+      "claim",
+      "renew"
+    ],
+    "operations": [
+      "data",
+      "analytics",
+      "ai",
+      "workflow",
+      "compliance",
+      "risk",
+      "service_operations"
+    ],
+    "ecosystem": [
+      "hospital",
+      "clinic",
+      "pharmacy",
+      "wellness_provider",
+      "insurer",
+      "bank",
+      "employer",
+      "platform"
+    ],
+    "performance": [
+      "growth",
+      "profitability",
+      "customer_retention",
+      "conversion",
+      "market_share",
+      "efficiency"
+    ]
+  },
+  "mapping_rules": [
+    "One icon ID maps to one stable semantic concept.",
+    "If no exact icon exists, use a labeled geometric node rather than inventing a misleading pictogram.",
+    "Never substitute an icon for a KPI label.",
+    "Do not encode multiple variables in one icon.",
+    "Keep icon size and stroke optically consistent on a page.",
+    "Use icon groups only for repeated taxonomies that aid scanning."
+  ],
+  "asset_metadata_required": [
+    "icon_id",
+    "semantic_label",
+    "asset_path_or_uri",
+    "family",
+    "viewbox",
+    "stroke_width",
+    "license",
+    "source",
+    "version",
+    "approved_by"
+  ],
+  "license_policy": "Only assets with recorded license/permission; generated icons must be stored as original project assets with provenance.",
+  "anti_patterns": [
+    "emoji mixed with SVG line icons",
+    "mixed stroke weights",
+    "brand logo redrawn as an icon",
+    "icons used as bullets in every paragraph",
+    "icon-only labels for unfamiliar concepts"
+  ]
+}
