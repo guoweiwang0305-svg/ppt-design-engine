@@ -16,6 +16,7 @@ from .production import PageQualityScores, score_page, select_layout, build_layo
 from .visual_qa import audit_design_ir, audit_rendered_png
 from .optimization import optimize_layout
 from .advanced_critic import critique_slide
+from .quality_loop import run_quality_loop
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
@@ -288,6 +289,30 @@ def advanced_critic_command(
     output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
     typer.echo(report.model_dump_json(indent=2))
     if report.decision == "blocked":
+        raise typer.Exit(1)
+
+
+
+@app.command("quality-loop")
+def quality_loop_command(
+    ir_file: Path,
+    output_dir: Path = Path("build/quality"),
+    max_rounds: int = 4,
+    ledger_file: Path | None = typer.Option(None, help="Optional DataLedger JSON file for metric nodes."),
+):
+    """Run safe repair rounds, render PPTX/PDF/PNG, then perform post-render critique."""
+    ir = DesignIR.model_validate_json(ir_file.read_text(encoding="utf-8"))
+    ledger = DataLedger.load(ledger_file) if ledger_file else None
+    result = run_quality_loop(ir, output_dir, max_rounds=max_rounds, ledger=ledger)
+    (output_dir / "design_ir").mkdir(parents=True, exist_ok=True)
+    (output_dir / "design_ir" / "final.json").write_text(
+        result.design_ir.model_dump_json(indent=2, by_alias=True), encoding="utf-8"
+    )
+    (output_dir / "quality-loop-report.json").write_text(
+        result.model_dump_json(indent=2), encoding="utf-8"
+    )
+    typer.echo(result.model_dump_json(indent=2))
+    if result.critic.decision == "blocked":
         raise typer.Exit(1)
 
 
