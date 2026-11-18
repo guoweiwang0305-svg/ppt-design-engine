@@ -1,0 +1,12 @@
+{
+  "grammar_id": "causal_chain",
+  "semantic_family": "causal",
+  "supported_relations": ["causality", "supports", "sequence"],
+  "composition": "driver-mechanism-outcome",
+  "reading_direction": "left_to_right",
+  "density": "high",
+  "hierarchy_levels": 3,
+  "preferred_edge_routing": "orthogonal",
+  "style_tokens": ["editorial-hierarchy", "thin-connectors", "focal-outcome"],
+  "anti_patterns": ["equal-weight-cards", "decorative-arrows"]
+}
