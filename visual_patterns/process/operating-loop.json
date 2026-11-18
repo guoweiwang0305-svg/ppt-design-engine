@@ -1,0 +1,12 @@
+{
+  "pattern_id": "process.operating_loop",
+  "name": "Multi-layer Operating Loop",
+  "semantic_families": ["cycle", "process", "causal"],
+  "relation_types": ["cycle", "sequence", "causality", "handoff"],
+  "min_nodes": 5,
+  "max_nodes": 18,
+  "density": "high",
+  "layouts": ["layered_closed_loop", "operating_cycle", "feedback_flywheel"],
+  "visual_grammar_ref": "operating_loop",
+  "tags": ["digital-operations", "closed-loop", "feedback", "business-report"]
+}
