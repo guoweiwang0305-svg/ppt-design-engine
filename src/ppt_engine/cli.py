@@ -11,6 +11,7 @@ from .orchestrator import Orchestrator
 from .renderer import export_pdf, export_pngs, render_pptx
 from .pptx_parser import parse_pptx_to_json
 from .mining import PatternReview, apply_pattern_reviews, mine_patterns, save_pattern_review
+from .visual_intelligence import extract_visual_features
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
@@ -129,3 +130,18 @@ def review_pattern_command(
     )
     save_pattern_review(review, ledger)
     typer.echo(f"Recorded {decision} for {pattern_id} -> {ledger}")
+
+
+@app.command("extract-visual-features")
+def extract_visual_features_command(
+    parsed_files: list[Path] = typer.Argument(..., exists=True, readable=True),
+    output: Path = Path("build/visual_intelligence/features.json"),
+):
+    """Extract explainable geometry, whitespace, typography and palette features."""
+    features = []
+    for source in parsed_files:
+        data = json.loads(source.read_text(encoding="utf-8"))
+        features.extend(item.model_dump(mode="json") for item in extract_visual_features(data))
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(features, ensure_ascii=False, indent=2), encoding="utf-8")
+    typer.echo(f"Extracted {len(features)} slide feature vectors -> {output}")
