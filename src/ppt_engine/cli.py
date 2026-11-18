@@ -6,6 +6,7 @@ from .models import DesignIR, PageStatus
 from .orchestrator import Orchestrator
 from .ledger import DataLedger
 from .renderer import render_pptx, export_pdf, export_pngs
+from .intelligence import InformationGraph, PatternCandidate, rank_patterns
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
@@ -62,3 +63,21 @@ def ledger_check(ledger_file: Path, refs_file: Path):
 
 if __name__ == "__main__":
     app()
+
+
+@app.command("rank-patterns")
+def rank_patterns_command(
+    graph_file: Path = typer.Argument(..., exists=True, readable=True),
+    pattern_dir: Path = Path("visual_patterns"),
+    density: str = "high",
+    top_k: int = 8,
+):
+    """Rank visual patterns for an Information Graph and explain the scores."""
+    patterns = [
+        PatternCandidate.model_validate_json(path.read_text(encoding="utf-8"))
+        for path in sorted(pattern_dir.rglob("*.json"))
+    ]
+    graph = InformationGraph.model_validate_json(graph_file.read_text(encoding="utf-8"))
+    ranked = rank_patterns(graph, patterns, requested_density=density, top_k=top_k)
+    typer.echo(json.dumps([item.model_dump(mode="json") for item in ranked],
+                          ensure_ascii=False, indent=2))
