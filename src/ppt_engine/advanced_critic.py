@@ -164,6 +164,36 @@ def _hierarchy(ir: DesignIR) -> list[dict]:
     return findings
 
 
+def _layout_findings(ir: DesignIR) -> list[dict]:
+    findings=[]
+    margin=0.14
+    nodes=[n for n in ir.nodes if n.geometry is not None and n.visual_type!="rect"]
+    edge_nodes=[]
+    for n in nodes:
+        g=n.geometry
+        if min(g.x,g.y,ir.canvas.width-(g.x+g.width),ir.canvas.height-(g.y+g.height)) < margin:
+            edge_nodes.append(n.id)
+    if edge_nodes:
+        findings.append({"code":"unsafe_canvas_margin","severity":"minor","node_ids":edge_nodes,
+            "diagnosis":f"{len(edge_nodes)} content elements sit within {margin:g} canvas units of an edge.",
+            "recommendation":"Check clipping risk and restore a consistent safe margin unless intentional full-bleed composition is documented."})
+    # Detect a near-aligned column whose left edges drift beyond normal tolerance.
+    ordered=sorted(nodes,key=lambda n:n.geometry.x)
+    for i in range(len(ordered)):
+        group=[ordered[i]]
+        for other in ordered[i+1:]:
+            if abs(other.geometry.x-ordered[i].geometry.x) <= 0.28:
+                group.append(other)
+        if len(group)>=3:
+            spread=max(n.geometry.x for n in group)-min(n.geometry.x for n in group)
+            if 0.08 < spread <= 0.28:
+                findings.append({"code":"alignment_drift","severity":"minor","node_ids":[n.id for n in group],
+                    "diagnosis":f"Potential column alignment drift of {spread:.2f} canvas units across {len(group)} elements.",
+                    "recommendation":"Snap elements to a shared left edge or document why the stagger is intentional."})
+                break
+    return findings
+
+
 def _split_suggestion(ir: DesignIR) -> PageSplitSuggestion | None:
     nodes=[n for n in ir.nodes if n.geometry is not None]
     if len(nodes)<8: return None
@@ -180,7 +210,7 @@ def _split_suggestion(ir: DesignIR) -> PageSplitSuggestion | None:
 
 
 def critique_slide(ir: DesignIR, rendered_png: str | None=None) -> AdvancedCriticReport:
-    findings=_hierarchy(ir)
+    findings=_hierarchy(ir)+_layout_findings(ir)
     qa=audit_design_ir(ir)
     for issue in qa.issues:
         findings.append({"code":issue.code,"severity":"blocker" if issue.severity=="error" else "major",
