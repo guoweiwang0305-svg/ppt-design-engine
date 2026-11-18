@@ -54,7 +54,13 @@ def render_pptx(ir: DesignIR, output: str | Path, ledger: DataLedger | None = No
         p = frame.paragraphs[0]
         p.alignment = {"left": PP_ALIGN.LEFT, "center": PP_ALIGN.CENTER, "right": PP_ALIGN.RIGHT}[node.align]
         run = p.add_run()
-        if node.data_ref:\n            if ledger is None:\n                raise ValueError(f"Node {node.id!r} references {node.data_ref!r}; provide a DataLedger")\n            entry = ledger.resolve(node.data_ref)\n            run.text = f"{entry.value} {entry.unit}".strip()\n        else:\n            run.text = node.text
+        if node.data_ref:
+            if ledger is None:
+                raise ValueError(f"Node {node.id!r} references {node.data_ref!r}; provide a DataLedger")
+            entry = ledger.resolve(node.data_ref)
+            run.text = f"{entry.value} {entry.unit}".strip()
+        else:
+            run.text = node.text
         run.font.size = Pt(node.font_size_pt)
         run.font.color.rgb = _rgb(node.color)
         run.font.name = "Aptos"
