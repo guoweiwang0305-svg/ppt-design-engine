@@ -1,0 +1,12 @@
+{
+  "pattern_id": "matrix.segmentation",
+  "name": "Multi-dimensional Segmentation Matrix",
+  "semantic_families": ["comparison", "distribution", "hierarchy"],
+  "relation_types": ["comparison", "distribution", "hierarchy"],
+  "min_nodes": 4,
+  "max_nodes": 20,
+  "density": "high",
+  "layouts": ["segmentation_matrix", "portfolio_quadrants", "matrix_with_personas"],
+  "visual_grammar_ref": "matrix",
+  "tags": ["customer-segmentation", "portfolio", "personas", "business-report"]
+}
