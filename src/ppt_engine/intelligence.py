@@ -12,6 +12,7 @@ class InformationNode(StrictModel):
     kind: str = "concept"
     importance: str = "medium"
     evidence_ref: str | None = None
+    data_ref: str | None = None
 
 
 class InformationEdge(StrictModel):
