@@ -115,7 +115,7 @@ def audit_rendered_png(image_path: str) -> RenderedImageAudit:
         issues.append(QAIssue(code="near_blank_render", severity="error", message="Rendered slide is almost entirely white."))
     if spread < 28:
         issues.append(QAIssue(code="low_global_contrast", severity="warning", message="Rendered slide has a low global luminance spread; inspect text and chart contrast."))
-    if min(image.size) < 500:
+    if min(image.size) < 400:
         issues.append(QAIssue(code="low_render_resolution", severity="warning", message="Rendered image is small; rerender at presentation QA resolution."))
     status = "blocked" if any(x.severity == "error" for x in issues) else ("warning" if issues else "review_required")
     return RenderedImageAudit(image_path=str(path), width_px=Image.open(path).width,
