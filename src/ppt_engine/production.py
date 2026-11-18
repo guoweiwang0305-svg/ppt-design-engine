@@ -165,6 +165,28 @@ def select_layout(graph: InformationGraph, catalog: dict[str, Any],
     )
 
 
+def _slot_matches(slot_id: str, node: Any) -> bool:
+    slot = slot_id.lower()
+    kind = str(node.kind).lower()
+    if "driver" in slot: return "driver" in kind
+    if "evidence" in slot or "source" in slot: return kind in ("evidence", "fact", "source", "metric", "kpi")
+    if "kpi" in slot or "metric" in slot: return kind in ("metric", "kpi", "number")
+    if "region" in slot or "geographic" in slot: return "region" in kind or "geography" in kind
+    if "rank" in slot: return kind in ("entity", "competitor", "ranked_entity", "metric")
+    if "segment" in slot: return "segment" in kind or "customer" in kind
+    if "tag" in slot: return "tag" in kind or "attribute" in kind
+    if "touchpoint" in slot: return "touchpoint" in kind or "digital" in kind or "human" in kind
+    if "actor" in slot: return kind in ("actor", "partner", "provider", "platform")
+    if "flow" in slot: return "flow" in kind or "stream" in kind
+    if "pillar" in slot: return kind in ("pillar", "capability", "initiative")
+    if "service" in slot: return "service" in kind or kind == "provider"
+    if "product" in slot: return "product" in kind or "need" in kind
+    if "outcome" in slot or "problem" in slot: return kind in ("outcome", "problem", "thesis")
+    if "initiative" in slot or "action" in slot: return kind in ("initiative", "action")
+    if "owner" in slot: return kind in ("owner", "role", "team")
+    return False
+
+
 def build_layout_plan(graph: InformationGraph, catalog: dict[str, Any],
                       pattern_id: str, geometry_catalog: dict[str, Any] | None = None) -> LayoutPlan:
     """Bind graph nodes to semantic slots without fabricating final coordinates."""
@@ -212,7 +234,8 @@ def build_layout_plan(graph: InformationGraph, catalog: dict[str, Any],
                 note="No unassigned InformationNode available.",
             ))
             continue
-        chosen = candidates[:max_items]
+        matched = [n for n in candidates if _slot_matches(slot_id, n)]
+        chosen = (matched or candidates)[:max_items]
         used.update(n.id for n in chosen)
         assignments.append(SlotAssignment(
             slot_id=slot_id, node_ids=[n.id for n in chosen], status="filled",
