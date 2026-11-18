@@ -115,11 +115,21 @@ def catalog_candidates(catalog: dict[str, Any]) -> list[PatternCandidate]:
     """Convert Generali catalog entries to the existing graph ranker contract."""
     candidates: list[PatternCandidate] = []
     valid_relations = {item.value for item in RelationType}
-    for item in catalog.get("patterns", []):
+    for item in catalog.get("layouts", catalog.get("patterns", [])):
         relations = [r for r in item.get("relations", []) if r in valid_relations]
         capacity = item.get("capacity", {})
-        ranges = [v for v in capacity.values()
-                  if isinstance(v, list) and len(v) == 2 and all(isinstance(x, int) for x in v)]
+        def collect_ranges(value: Any) -> list[list[int]]:
+            found: list[list[int]] = []
+            if isinstance(value, list) and len(value) == 2 and all(isinstance(x, int) for x in value):
+                found.append(value)
+            elif isinstance(value, dict):
+                for child in value.values():
+                    found.extend(collect_ranges(child))
+            elif isinstance(value, list):
+                for child in value:
+                    found.extend(collect_ranges(child))
+            return found
+        ranges = collect_ranges(capacity)
         min_nodes = min((v[0] for v in ranges), default=2)
         max_nodes = max((v[1] for v in ranges), default=24)
         candidates.append(PatternCandidate(
@@ -155,7 +165,7 @@ def select_layout(graph: InformationGraph, catalog: dict[str, Any],
 def build_layout_plan(graph: InformationGraph, catalog: dict[str, Any],
                       pattern_id: str) -> LayoutPlan:
     """Bind graph nodes to semantic slots without fabricating final coordinates."""
-    entry = next((p for p in catalog.get("patterns", []) if p.get("id") == pattern_id), None)
+    entry = next((p for p in catalog.get("layouts", catalog.get("patterns", [])) if p.get("id") == pattern_id), None)
     if entry is None:
         raise KeyError(f"Unknown layout pattern: {pattern_id}")
     raw_slots = entry.get("slots", [])
