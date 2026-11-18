@@ -1,0 +1,13 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Visual Grammar",
+  "type":"object","additionalProperties":false,
+  "required":["grammar_id","semantic_family","supported_relations","composition"],
+  "properties":{
+    "grammar_id":{"type":"string"},"semantic_family":{"type":"string"},
+    "supported_relations":{"type":"array","items":{"enum":["sequence","hierarchy","comparison","causality","cycle","network","composition","distribution","supports","handoff"]}},
+    "composition":{"type":"string"},"reading_direction":{"type":"string"},"density":{"enum":["low","medium","high"]},
+    "hierarchy_levels":{"type":"integer","minimum":1},"preferred_edge_routing":{"type":"string"},
+    "style_tokens":{"type":"array","items":{"type":"string"}},"anti_patterns":{"type":"array","items":{"type":"string"}}
+  }
+}
