@@ -14,6 +14,7 @@ from .mining import PatternReview, apply_pattern_reviews, mine_patterns, save_pa
 from .visual_intelligence import extract_visual_features
 from .production import PageQualityScores, score_page, select_layout, build_layout_plan, layout_plan_to_design_ir
 from .visual_qa import audit_design_ir, audit_rendered_png
+from .optimization import optimize_layout
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
@@ -238,28 +239,6 @@ def compile_layout_command(
 
 
 
-@app.command("compile-layout")
-def compile_layout_command(
-    graph_file: Path,
-    pattern_id: str,
-    catalog_file: Path = Path("visual_patterns/generali/insurance_layout_catalog.json"),
-    geometry_file: Path = Path("visual_patterns/generali/layout_geometry.json"),
-    output: Path = Path("build/design_ir/compiled-slide.json"),
-    min_font_pt: float = 12,
-):
-    """Resolve semantic slots into editable DesignIR using versioned geometry tokens."""
-    graph = InformationGraph.model_validate_json(graph_file.read_text(encoding="utf-8"))
-    catalog = json.loads(catalog_file.read_text(encoding="utf-8"))
-    geometry = json.loads(geometry_file.read_text(encoding="utf-8"))
-    plan = build_layout_plan(graph, catalog, pattern_id, geometry_catalog=geometry)
-    if plan.geometry_status != "resolved":
-        raise typer.BadParameter("Layout geometry is incomplete: " + "; ".join(plan.warnings))
-    ir = layout_plan_to_design_ir(graph, plan, min_font_pt=min_font_pt)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(ir.model_dump_json(indent=2, by_alias=True), encoding="utf-8")
-    typer.echo(f"Compiled {ir.slide_id}: {len(ir.nodes)} nodes, {len(ir.relations)} relations -> {output}")
-
-
 @app.command("audit-rendered-png")
 def audit_rendered_png_command(
     image_file: Path,
@@ -271,6 +250,26 @@ def audit_rendered_png_command(
     output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
     typer.echo(report.model_dump_json(indent=2))
     if report.status == "blocked":
+        raise typer.Exit(1)
+
+
+
+@app.command("optimize-layout")
+def optimize_layout_command(
+    ir_file: Path,
+    output: Path = Path("build/design_ir/optimized-slide.json"),
+    report_output: Path = Path("build/qa/visual-critic.json"),
+    max_iterations: int = 2,
+):
+    """Apply bounded safe repairs and emit an explainable visual-critic report."""
+    ir = DesignIR.model_validate_json(ir_file.read_text(encoding="utf-8"))
+    result = optimize_layout(ir, max_iterations=max_iterations)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    report_output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(result.design_ir.model_dump_json(indent=2, by_alias=True), encoding="utf-8")
+    report_output.write_text(result.report.model_dump_json(indent=2), encoding="utf-8")
+    typer.echo(result.report.model_dump_json(indent=2))
+    if result.report.decision == "blocked":
         raise typer.Exit(1)
 
 
