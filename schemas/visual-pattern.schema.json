@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Visual Pattern",
+  "type":"object","additionalProperties":false,
+  "required":["pattern_id","name","semantic_families","relation_types","visual_grammar_ref"],
+  "properties":{
+    "pattern_id":{"type":"string"},"name":{"type":"string"},
+    "semantic_families":{"type":"array","items":{"type":"string"}},
+    "relation_types":{"type":"array","items":{"enum":["sequence","hierarchy","comparison","causality","cycle","network","composition","distribution","supports","handoff"]}},
+    "min_nodes":{"type":"integer","minimum":1},"max_nodes":{"type":"integer","minimum":1},
+    "density":{"enum":["low","medium","high"]},"layouts":{"type":"array","items":{"type":"string"}},
+    "visual_grammar_ref":{"type":"string"},"tags":{"type":"array","items":{"type":"string"}}
+  }
+}
