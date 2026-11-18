@@ -1,0 +1,12 @@
+{
+  "grammar_id": "ecosystem_map",
+  "semantic_family": "network",
+  "supported_relations": ["network", "composition", "causality", "supports"],
+  "composition": "clustered-network",
+  "reading_direction": "center_out",
+  "density": "high",
+  "hierarchy_levels": 3,
+  "preferred_edge_routing": "orthogonal",
+  "style_tokens": ["cluster-encoding", "edge-labels", "selective-accent"],
+  "anti_patterns": ["hairball-network", "unlabeled-edges", "uniform-node-size"]
+}
