@@ -89,3 +89,16 @@ uv run ppt-engine review-pattern mined.horizontal.001 --decision accept --notes 
 ```
 
 See [P0.8 implementation notes](docs/P0_8_DESIGN_PATTERN_MINING.md). Mining candidates remain unapproved until an expert accepts them.
+
+
+## P0.9 — Visual Pattern Intelligence
+
+Extract interpretable visual feature vectors from P0.7 parsed decks:
+
+```bash
+uv run ppt-engine extract-visual-features build/reference/gcl.json build/reference/aia.json --output build/visual_intelligence/features.json
+```
+
+P0.9 adds approximate occupancy/whitespace, weighted visual center, focal dominance, image/text ratios, alignment regularity, typography hierarchy, editable palette and chart/table mix. Similarity is transparent and deterministic (geometry 35%, composition 20%, typography 15%, color 15%, content mix 15%). It is not a learned aesthetic model. Only expert-approved P0.8 patterns with explicit semantic mappings can enter production retrieval.
+
+See docs/P0_9_VISUAL_PATTERN_INTELLIGENCE.md and design_profiles/generali_corporate.json.
