@@ -108,7 +108,7 @@ class RenderedImageAudit(StrictModel):
 def audit_rendered_png(image_path: str) -> RenderedImageAudit:
     """Measure basic rendered-pixel health without pretending to perform OCR or aesthetic review."""
     from pathlib import Path
-    from PIL import Image, ImageStat
+    from PIL import Image
     path = Path(image_path)
     if not path.exists():
         raise FileNotFoundError(path)
