@@ -6,6 +6,7 @@ from pathlib import Path
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.enum.shapes import MSO_CONNECTOR
 from pptx.util import Inches, Pt
 from .models import DesignIR
 from .ledger import DataLedger
@@ -25,6 +26,25 @@ def render_pptx(ir: DesignIR, output: str | Path, ledger: DataLedger | None = No
     prs.slide_width = Inches(ir.canvas.width if ir.canvas.unit == "in" else ir.canvas.width / 72)
     prs.slide_height = Inches(ir.canvas.height if ir.canvas.unit == "in" else ir.canvas.height / 72)
     slide = prs.slides.add_slide(prs.slide_layouts[6])
+    # Draw semantic relationships first so node shapes remain visually in the foreground.
+    node_map = {node.id: node for node in ir.nodes if node.geometry is not None}
+    for relation in ir.relations:
+        source = node_map.get(relation.from_)
+        target = node_map.get(relation.to)
+        if source is None or target is None:
+            continue
+        scale = 1 if ir.canvas.unit == "in" else (1 / 72 if ir.canvas.unit == "pt" else 1 / 96)
+        sx = (source.geometry.x + source.geometry.width / 2) * scale
+        sy = (source.geometry.y + source.geometry.height / 2) * scale
+        tx = (target.geometry.x + target.geometry.width / 2) * scale
+        ty = (target.geometry.y + target.geometry.height / 2) * scale
+        if relation.direction == "reverse":
+            sx, sy, tx, ty = tx, ty, sx, sy
+        connector = slide.shapes.add_connector(
+            MSO_CONNECTOR.STRAIGHT, Inches(sx), Inches(sy), Inches(tx), Inches(ty)
+        )
+        connector.line.color.rgb = _rgb("#B7B7B7")
+        connector.line.width = Pt(1.1)
     for node in ir.nodes:
         if node.geometry is None:
             raise ValueError(f"Node {node.id!r} has no geometry; renderer never guesses layout")
