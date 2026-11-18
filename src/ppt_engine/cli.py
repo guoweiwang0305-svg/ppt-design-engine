@@ -1,12 +1,14 @@
 """Command-line interface."""
-from pathlib import Path
 import json
+from pathlib import Path
+
 import typer
+
+from .intelligence import InformationGraph, PatternCandidate, rank_patterns
+from .ledger import DataLedger
 from .models import DesignIR, PageStatus
 from .orchestrator import Orchestrator
-from .ledger import DataLedger
-from .renderer import render_pptx, export_pdf, export_pngs
-from .intelligence import InformationGraph, PatternCandidate, rank_patterns
+from .renderer import export_pdf, export_pngs, render_pptx
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
@@ -16,7 +18,7 @@ app.add_typer(ledger_app, name="ledger")
 
 
 @app.command()
-def validate(ir_file: Path = typer.Argument(..., exists=True, readable=True)):
+def validate(ir_file: Path):
     """Validate a Design IR JSON document."""
     ir = DesignIR.model_validate_json(ir_file.read_text(encoding="utf-8"))
     typer.echo(f"VALID {ir.deck_id}/{ir.slide_id}: {len(ir.nodes)} nodes, {len(ir.relations)} relations")
@@ -67,7 +69,7 @@ if __name__ == "__main__":
 
 @app.command("rank-patterns")
 def rank_patterns_command(
-    graph_file: Path = typer.Argument(..., exists=True, readable=True),
+    graph_file: Path,
     pattern_dir: Path = Path("visual_patterns"),
     density: str = "high",
     top_k: int = 8,
