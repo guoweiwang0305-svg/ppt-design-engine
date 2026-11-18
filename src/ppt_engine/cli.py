@@ -15,6 +15,7 @@ from .visual_intelligence import extract_visual_features
 from .production import PageQualityScores, score_page, select_layout, build_layout_plan, layout_plan_to_design_ir
 from .visual_qa import audit_design_ir, audit_rendered_png
 from .optimization import optimize_layout
+from .advanced_critic import critique_slide
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
@@ -270,6 +271,23 @@ def optimize_layout_command(
     report_output.write_text(result.report.model_dump_json(indent=2), encoding="utf-8")
     typer.echo(result.report.model_dump_json(indent=2))
     if result.report.decision == "blocked":
+        raise typer.Exit(1)
+
+
+
+@app.command("advanced-critic")
+def advanced_critic_command(
+    ir_file: Path,
+    rendered_png: Path = typer.Option(None, help="Optional rendered PNG for pixel-level post-render audit."),
+    output: Path = Path("build/qa/advanced-critic.json"),
+):
+    """Run hierarchy, collision, connector-routing and density diagnostics."""
+    ir = DesignIR.model_validate_json(ir_file.read_text(encoding="utf-8"))
+    report = critique_slide(ir, str(rendered_png) if rendered_png else None)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
+    typer.echo(report.model_dump_json(indent=2))
+    if report.decision == "blocked":
         raise typer.Exit(1)
 
 
