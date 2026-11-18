@@ -235,7 +235,12 @@ def build_layout_plan(graph: InformationGraph, catalog: dict[str, Any],
             ))
             continue
         matched = [n for n in candidates if _slot_matches(slot_id, n)]
-        chosen = (matched or candidates)[:max_items]
+        semantic_slot = any(token in slot_id.lower() for token in (
+            "driver", "evidence", "source", "kpi", "metric", "region", "geographic",
+            "rank", "segment", "tag", "touchpoint", "actor", "flow", "pillar",
+            "service", "product", "outcome", "problem", "initiative", "action", "owner",
+        ))
+        chosen = (matched if semantic_slot else candidates)[:max_items]
         used.update(n.id for n in chosen)
         assignments.append(SlotAssignment(
             slot_id=slot_id, node_ids=[n.id for n in chosen], status="filled",
