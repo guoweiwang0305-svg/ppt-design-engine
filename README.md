@@ -78,3 +78,14 @@ uv run ppt-engine parse-pptx path/to/reference.pptx --output build/reference/ref
 ```
 
 Extracts native text runs, geometry, shape/group hierarchy, fill/line styles, image crop metadata and connector geometry. See `docs/P0_7_PPTX_REFERENCE_PARSER.md` for boundaries and semantics-safety rules.
+
+## P0.8 — Design Pattern Mining
+
+Mine recurring structures from P0.7 parser output and maintain an expert review ledger:
+
+```bash
+uv run ppt-engine mine-patterns build/reference/reference.json --min-frequency 2
+uv run ppt-engine review-pattern mined.horizontal.001 --decision accept --notes "Clear hierarchy"
+```
+
+See [P0.8 implementation notes](docs/P0_8_DESIGN_PATTERN_MINING.md). Mining candidates remain unapproved until an expert accepts them.
