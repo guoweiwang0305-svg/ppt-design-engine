@@ -200,7 +200,9 @@ def build_layout_plan_command(
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(plan.model_dump_json(indent=2), encoding="utf-8")
     typer.echo(f"Layout plan -> {output}")
-\n\n
+
+
+
 
 @app.command("audit-design-ir")
 def audit_design_ir_command(
