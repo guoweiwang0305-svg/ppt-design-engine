@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/reference-pattern-seeds.schema.json",
+  "title": "Reference Pattern Seeds",
+  "type": "object",
+  "required": ["seed_catalog_id", "source_dataset", "candidate_count", "seeds"],
+  "properties": {
+    "seed_catalog_id": {"type": "string"},
+    "source_dataset": {"type": "string"},
+    "candidate_count": {"type": "integer", "minimum": 0},
+    "approval_policy": {"type": "string"},
+    "seeds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reference_id", "pattern_id", "source_file", "source_slide_number", "source_family", "style_profile", "page_type", "thumbnail", "approval_status"],
+        "properties": {
+          "reference_id": {"type": "string"},
+          "pattern_id": {"type": "string"},
+          "source_file": {"type": "string"},
+          "source_slide_number": {"type": "integer", "minimum": 1},
+          "source_family": {"type": "string"},
+          "style_profile": {"type": "string"},
+          "page_type": {"type": "string"},
+          "thumbnail": {"type": "string"},
+          "automated_score": {"type": "number", "minimum": 0, "maximum": 5},
+          "visual_review": {"type": "string"},
+          "review_decision": {"enum": ["candidate", "revise", "reject"]},
+          "approval_status": {"enum": ["pending_user_approval", "approved", "rejected"]},
+          "visual_review_notes": {"type": "string"},
+          "risks": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
