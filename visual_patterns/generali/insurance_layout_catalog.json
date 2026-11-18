@@ -1,0 +1,676 @@
+{
+  "catalog_id": "generali_insurance_layout_catalog_v1",
+  "profile_ref": "generali_corporate_reference_v1",
+  "status": "candidate_library_requires_expert_review",
+  "global_constraints": {
+    "canvas": "16:9",
+    "reading_order": "conclusion_then_evidence_then_implication",
+    "min_body_font_pt": 14,
+    "preferred_body_font_pt": [
+      16,
+      20
+    ],
+    "dense_data_font_pt": [
+      12,
+      14
+    ],
+    "source_font_pt": [
+      8,
+      10
+    ],
+    "red_usage": "focal signal, not page-wide default",
+    "max_primary_focal_points": 1,
+    "all_metrics_require": [
+      "value",
+      "unit",
+      "period",
+      "scope",
+      "source"
+    ],
+    "density_rule": "group before compressing; never use smaller type as first response"
+  },
+  "layouts": [
+    {
+      "id": "gen.kpi.executive_dashboard",
+      "name": "经营数据总览",
+      "use_when": "回答经营表现如何、哪些指标驱动变化",
+      "semantic_families": [
+        "performance",
+        "comparison",
+        "composition"
+      ],
+      "relations": [
+        "comparison",
+        "composition",
+        "causality"
+      ],
+      "capacity": {
+        "kpis": [
+          3,
+          6
+        ],
+        "supporting_charts": [
+          1,
+          3
+        ]
+      },
+      "composition": "一个主结论或主指标；3-6个对齐KPI；底部放趋势或结构证据",
+      "slots": [
+        "headline_conclusion",
+        "primary_kpi",
+        "secondary_kpis",
+        "trend_or_mix_evidence",
+        "period_scope_source"
+      ],
+      "chart_choices": [
+        "kpi_scorecard",
+        "small_multiple_sparkline",
+        "variance_bar"
+      ],
+      "density": "high",
+      "rules": [
+        "每个KPI同时显示本期值、变化值和口径",
+        "同比与环比不可混用",
+        "仅主指标使用品牌红，其余使用中性色",
+        "按指标组分配空间，不平均堆卡片"
+      ],
+      "anti_patterns": [
+        "无口径大数字墙",
+        "每个指标采用不同图表"
+      ]
+    },
+    {
+      "id": "gen.performance.small_multiples",
+      "name": "多业务线经营对比",
+      "use_when": "比较多个险种、渠道、地区或业务线的同一指标",
+      "semantic_families": [
+        "comparison",
+        "performance"
+      ],
+      "relations": [
+        "comparison",
+        "distribution"
+      ],
+      "capacity": {
+        "series": [
+          3,
+          8
+        ],
+        "periods": [
+          2,
+          6
+        ]
+      },
+      "composition": "共享尺度的小倍图；统一顺序；突出一个关注系列",
+      "slots": [
+        "comparison_question",
+        "shared_unit_and_period",
+        "small_multiple_panels",
+        "key_outlier_annotation",
+        "source"
+      ],
+      "chart_choices": [
+        "small_multiple_bar",
+        "small_multiple_line",
+        "dot_plot"
+      ],
+      "density": "high",
+      "rules": [
+        "可比指标统一坐标尺度",
+        "量纲不同必须拆分面板",
+        "红色只突出关注对象或关键变化",
+        "每个小图直接标注关键值"
+      ],
+      "anti_patterns": [
+        "多个双轴图拼接",
+        "尺度不同但不说明"
+      ]
+    },
+    {
+      "id": "gen.market.ranking",
+      "name": "市场排名与竞争位置",
+      "use_when": "展示市场地位、同业对标和名次变化",
+      "semantic_families": [
+        "ranking",
+        "comparison"
+      ],
+      "relations": [
+        "ranking",
+        "comparison"
+      ],
+      "capacity": {
+        "entities": [
+          4,
+          12
+        ]
+      },
+      "composition": "横向排名条形图或紧凑排名表；突出本公司并标注变化",
+      "slots": [
+        "market_scope",
+        "ranked_entities",
+        "focal_company_highlight",
+        "rank_change",
+        "source_and_definition"
+      ],
+      "chart_choices": [
+        "horizontal_bar",
+        "lollipop",
+        "rank_table"
+      ],
+      "density": "high",
+      "rules": [
+        "说明市场、期间、样本和统计口径",
+        "名次与规模值分开呈现",
+        "同一维度按数值排序",
+        "超过8个对象优先横向条形图"
+      ],
+      "anti_patterns": [
+        "只放奖杯图标",
+        "无样本口径的第一名宣称"
+      ]
+    },
+    {
+      "id": "gen.geo.regional_presence",
+      "name": "区域分布与经营覆盖",
+      "use_when": "解释区域布局、分支覆盖、市场渗透或地区贡献",
+      "semantic_families": [
+        "distribution",
+        "geography",
+        "comparison"
+      ],
+      "relations": [
+        "distribution",
+        "hierarchy"
+      ],
+      "capacity": {
+        "regions": [
+          4,
+          15
+        ],
+        "callouts": [
+          2,
+          5
+        ]
+      },
+      "composition": "地图定位 + 区域贡献排序面板；地图不单独承担精确比较",
+      "slots": [
+        "geographic_scope",
+        "map_or_region_grid",
+        "regional_metrics",
+        "callouts",
+        "source"
+      ],
+      "chart_choices": [
+        "choropleth",
+        "bubble_map",
+        "ranked_bar_companion"
+      ],
+      "density": "high",
+      "rules": [
+        "地图颜色有图例和数值区间",
+        "地理面积不可代表业务规模",
+        "重点区域用标注连接",
+        "若地理形状不重要则用矩阵或条形图"
+      ],
+      "anti_patterns": [
+        "无数据装饰地图",
+        "气泡同时编码多个变量"
+      ]
+    },
+    {
+      "id": "gen.customer.segmentation",
+      "name": "客户分层与价值细分",
+      "use_when": "呈现客户分群、客群价值、需求差异和经营策略",
+      "semantic_families": [
+        "segmentation",
+        "comparison",
+        "prioritization"
+      ],
+      "relations": [
+        "classification",
+        "comparison",
+        "causality"
+      ],
+      "capacity": {
+        "segments": [
+          3,
+          6
+        ],
+        "attributes": [
+          2,
+          5
+        ]
+      },
+      "composition": "客群矩阵 + 客群画像条 + 差异化经营动作",
+      "slots": [
+        "segmentation_basis",
+        "segment_axes",
+        "segment_clusters",
+        "needs_and_value",
+        "recommended_proposition",
+        "evidence"
+      ],
+      "chart_choices": [
+        "2x2_matrix",
+        "heatmap",
+        "bubble_matrix"
+      ],
+      "density": "high",
+      "rules": [
+        "分层轴可解释且可测量",
+        "客群名称绑定量化定义",
+        "每个客群映射需求、价值和动作",
+        "避免只按年龄或收入单一标签定义"
+      ],
+      "anti_patterns": [
+        "无数据Persona插画",
+        "客群之间没有差异的伪细分"
+      ]
+    },
+    {
+      "id": "gen.customer.tagging",
+      "name": "客户标签与需求识别",
+      "use_when": "展示标签体系、数据字段、行为信号到经营动作",
+      "semantic_families": [
+        "taxonomy",
+        "classification",
+        "causal"
+      ],
+      "relations": [
+        "hierarchy",
+        "supports",
+        "causality"
+      ],
+      "capacity": {
+        "levels": [
+          2,
+          4
+        ],
+        "tags": [
+          6,
+          18
+        ]
+      },
+      "composition": "分组标签树；将信号组连接到经营动作",
+      "slots": [
+        "customer_universe",
+        "tag_dimensions",
+        "tag_examples",
+        "signal_to_need_mapping",
+        "action_output"
+      ],
+      "chart_choices": [
+        "taxonomy_tree",
+        "tag_matrix",
+        "signal_action_flow"
+      ],
+      "density": "high",
+      "rules": [
+        "按稳定属性、需求、行为、价值分层",
+        "标签注明数据来源或识别规则",
+        "每个标签组映射至少一个动作",
+        "按决策用途组织标签"
+      ],
+      "anti_patterns": [
+        "随机标签云",
+        "标签堆叠却没有使用场景"
+      ]
+    },
+    {
+      "id": "gen.channel.omo_loop",
+      "name": "渠道协同与OMO闭环",
+      "use_when": "解释线上线下协同、客户旅程、渠道交接和转化",
+      "semantic_families": [
+        "process",
+        "network",
+        "conversion"
+      ],
+      "relations": [
+        "sequence",
+        "handoff",
+        "feedback",
+        "causality"
+      ],
+      "capacity": {
+        "stages": [
+          4,
+          7
+        ],
+        "channels": [
+          2,
+          4
+        ]
+      },
+      "composition": "横向客户旅程 + 并行渠道泳道 + 明确交接与反馈回路",
+      "slots": [
+        "customer_trigger",
+        "digital_touchpoints",
+        "human_touchpoints",
+        "handoff_rules",
+        "conversion_events",
+        "feedback_data",
+        "owner"
+      ],
+      "chart_choices": [
+        "swimlane_journey",
+        "conversion_funnel",
+        "service_blueprint"
+      ],
+      "density": "high",
+      "rules": [
+        "客户动作、前台动作、后台动作分层",
+        "交接标明责任主体和触发条件",
+        "漏斗每阶段显示转化率及分母",
+        "反馈必须指向数据或下一步动作"
+      ],
+      "anti_patterns": [
+        "只放线上线下图标的空泛OMO",
+        "把触点顺序画成组织架构"
+      ]
+    },
+    {
+      "id": "gen.ecosystem.value_exchange",
+      "name": "生态地图与价值交换",
+      "use_when": "展示合作伙伴、客户、产品、服务和平台之间的关系",
+      "semantic_families": [
+        "network",
+        "ecosystem"
+      ],
+      "relations": [
+        "network",
+        "supports",
+        "handoff",
+        "exchange"
+      ],
+      "capacity": {
+        "actors": [
+          5,
+          12
+        ],
+        "relationship_types": [
+          2,
+          5
+        ]
+      },
+      "composition": "中心客户或价值主张 + 分组生态主体 + 标注价值/数据/服务流",
+      "slots": [
+        "central_customer_or_platform",
+        "actor_clusters",
+        "value_flows",
+        "data_flows",
+        "service_flows",
+        "governance_or_owner"
+      ],
+      "chart_choices": [
+        "ecosystem_map",
+        "network_diagram",
+        "layered_platform_map"
+      ],
+      "density": "high",
+      "rules": [
+        "节点代表真实主体或能力",
+        "边命名为价值、服务、数据或责任流",
+        "同类节点聚类并减少交叉线",
+        "中心节点按真实控制关系确定"
+      ],
+      "anti_patterns": [
+        "无语义连线网",
+        "节点环绕中心但关系无标签"
+      ]
+    },
+    {
+      "id": "gen.strategy.pillars",
+      "name": "战略框架与能力支柱",
+      "use_when": "把战略目标拆解为支柱、能力、举措和KPI",
+      "semantic_families": [
+        "strategy",
+        "hierarchy",
+        "causal"
+      ],
+      "relations": [
+        "hierarchy",
+        "supports",
+        "causality"
+      ],
+      "capacity": {
+        "pillars": [
+          3,
+          6
+        ],
+        "initiatives_per_pillar": [
+          2,
+          5
+        ]
+      },
+      "composition": "战略目标顶层；3-6个支柱；下接能力与举措；底部为结果KPI",
+      "slots": [
+        "strategic_ambition",
+        "pillars",
+        "capabilities",
+        "initiatives",
+        "outcome_kpis",
+        "enablers"
+      ],
+      "chart_choices": [
+        "pillar_framework",
+        "strategy_house",
+        "layered_capability_map"
+      ],
+      "density": "high",
+      "rules": [
+        "支柱是互斥或明确互补的逻辑维度",
+        "区分目标、能力、举措和结果指标",
+        "底座能力单独成层",
+        "举措映射责任和衡量指标"
+      ],
+      "anti_patterns": [
+        "把口号当战略支柱",
+        "一页塞入全套战略地图而无主次"
+      ]
+    },
+    {
+      "id": "gen.product.lifecycle_matrix",
+      "name": "产品与生命周期需求矩阵",
+      "use_when": "比较人生阶段、保障需求、产品和服务",
+      "semantic_families": [
+        "matrix",
+        "portfolio",
+        "lifecycle"
+      ],
+      "relations": [
+        "classification",
+        "comparison",
+        "supports"
+      ],
+      "capacity": {
+        "life_stages": [
+          4,
+          7
+        ],
+        "needs": [
+          3,
+          8
+        ]
+      },
+      "composition": "生命周期阶段为列，需求为行，产品/服务映射为单元格",
+      "slots": [
+        "life_stage_axis",
+        "need_axis",
+        "product_or_service_mapping",
+        "coverage_gaps",
+        "source_and_qualification"
+      ],
+      "chart_choices": [
+        "matrix",
+        "heatmap",
+        "portfolio_map"
+      ],
+      "density": "high",
+      "rules": [
+        "产品功能与客户需求分开编码",
+        "保障责任、收益演示、服务权益不可混为一类",
+        "定义空白单元格含义",
+        "保险利益描述遵循条款和合规口径"
+      ],
+      "anti_patterns": [
+        "产品Logo堆叠",
+        "把示例收益当承诺收益"
+      ]
+    },
+    {
+      "id": "gen.health.ecosystem",
+      "name": "健康服务生态图",
+      "use_when": "展示保险保障、健康管理、医疗服务和客户触点",
+      "semantic_families": [
+        "ecosystem",
+        "journey",
+        "service"
+      ],
+      "relations": [
+        "network",
+        "sequence",
+        "handoff"
+      ],
+      "capacity": {
+        "actors": [
+          5,
+          10
+        ],
+        "journey_stages": [
+          3,
+          6
+        ]
+      },
+      "composition": "客户生命周期轴 + 服务主体/能力轴；标出服务接入与转介路径",
+      "slots": [
+        "customer_need",
+        "lifecycle_stage",
+        "service_provider_clusters",
+        "access_route",
+        "insurance_link",
+        "service_outcome"
+      ],
+      "chart_choices": [
+        "service_blueprint",
+        "ecosystem_map",
+        "lifecycle_matrix"
+      ],
+      "density": "high",
+      "rules": [
+        "区分保险责任与非保险增值服务",
+        "服务商角色、准入和责任边界需标注",
+        "客户触点与后台履约分层",
+        "流程箭头表达服务顺序而非价值高低"
+      ],
+      "anti_patterns": [
+        "用医疗机构Logo冒充闭环证据",
+        "模糊保险与医疗服务责任"
+      ]
+    },
+    {
+      "id": "gen.operating.causal_tree",
+      "name": "经营问题树与驱动因素",
+      "use_when": "解释经营结果的驱动因素和根因",
+      "semantic_families": [
+        "causal",
+        "hierarchy",
+        "diagnostic"
+      ],
+      "relations": [
+        "causality",
+        "hierarchy",
+        "supports"
+      ],
+      "capacity": {
+        "levels": [
+          2,
+          4
+        ],
+        "drivers": [
+          3,
+          12
+        ]
+      },
+      "composition": "顶层结果；向下拆解主要驱动；挂接证据和可控杠杆",
+      "slots": [
+        "outcome_or_problem",
+        "primary_drivers",
+        "secondary_drivers",
+        "evidence",
+        "controllable_levers",
+        "owner"
+      ],
+      "chart_choices": [
+        "issue_tree",
+        "driver_tree",
+        "waterfall_bridge"
+      ],
+      "density": "high",
+      "rules": [
+        "同层原因尽量MECE",
+        "相关性不得直接写成因果",
+        "无证据的根因标记为假设",
+        "可控杠杆与外部因素分开"
+      ],
+      "anti_patterns": [
+        "无证据因果箭头",
+        "仅把项目分类画成问题树"
+      ]
+    },
+    {
+      "id": "gen.financial.bridge",
+      "name": "经营变化桥与贡献拆解",
+      "use_when": "解释同比或环比变化由哪些正负贡献构成",
+      "semantic_families": [
+        "variance",
+        "causal",
+        "composition"
+      ],
+      "relations": [
+        "composition",
+        "causality",
+        "sequence"
+      ],
+      "capacity": {
+        "drivers": [
+          3,
+          8
+        ]
+      },
+      "composition": "起点总额 + 正负贡献项 + 终点总额，并显式勾稽",
+      "slots": [
+        "starting_value",
+        "positive_drivers",
+        "negative_drivers",
+        "ending_value",
+        "reconciliation",
+        "source"
+      ],
+      "chart_choices": [
+        "waterfall",
+        "variance_bridge"
+      ],
+      "density": "high",
+      "rules": [
+        "起点加贡献项核对到终点",
+        "正负方向和单位统一",
+        "未解释差额单独列示",
+        "百分比贡献与绝对值贡献不可混排"
+      ],
+      "anti_patterns": [
+        "不勾稽的瀑布图",
+        "只标变化率不标基数"
+      ]
+    }
+  ],
+  "reference_basis": [
+    "用户提供的GCL 21页和AIA 60页参考PPT",
+    "Generali FY25 investor materials与年度综合报告",
+    "外部咨询版式分类作为结构灵感"
+  ],
+  "limitations": [
+    "目录是版式设计规格，不是逐页复刻",
+    "81页原始页面本轮尚未完成程序化评分",
+    "所有模式需人工审核后才能批准进入生产"
+  ]
+}
