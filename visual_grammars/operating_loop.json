@@ -1,0 +1,12 @@
+{
+  "grammar_id": "operating_loop",
+  "semantic_family": "cycle",
+  "supported_relations": ["cycle", "sequence", "causality", "handoff"],
+  "composition": "multi-layer-feedback-loop",
+  "reading_direction": "clockwise",
+  "density": "high",
+  "hierarchy_levels": 4,
+  "preferred_edge_routing": "curved_or_orthogonal",
+  "style_tokens": ["feedback-encoding", "layered-loop", "outcome-highlight"],
+  "anti_patterns": ["circular-decoration-without-causality", "ambiguous-direction"]
+}
