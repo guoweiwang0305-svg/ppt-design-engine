@@ -1,0 +1,12 @@
+{
+  "grammar_id": "matrix",
+  "semantic_family": "comparison",
+  "supported_relations": ["comparison", "distribution", "hierarchy"],
+  "composition": "two-dimensional-classification",
+  "reading_direction": "top_left_to_bottom_right",
+  "density": "high",
+  "hierarchy_levels": 3,
+  "preferred_edge_routing": "grid",
+  "style_tokens": ["axis-labels", "quadrant-meaning", "persona-anchors"],
+  "anti_patterns": ["decorative-quadrants", "unlabeled-axes"]
+}
