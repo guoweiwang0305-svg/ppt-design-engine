@@ -201,6 +201,10 @@ def build_layout_plan(graph: InformationGraph, catalog: dict[str, Any],
             assignments.append(SlotAssignment(slot_id=slot_id, status="empty_optional",
                 note="Page thesis is rendered in the dedicated thesis node."))
             continue
+        if title_only:
+            assignments.append(SlotAssignment(slot_id=slot_id, status="empty_optional",
+                note="Page thesis is rendered in the dedicated thesis node."))
+            continue
         candidates = [n for n in nodes if n.id not in used]
         if not candidates:
             assignments.append(SlotAssignment(
