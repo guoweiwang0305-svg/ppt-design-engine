@@ -1,0 +1,19 @@
+{
+  "graph_id":"five-channel-growth",
+  "thesis":"Five channels contribute to customer growth through different acquisition and service mechanisms",
+  "nodes":[
+    {"id":"growth","label":"Customer growth","kind":"outcome","importance":"critical"},
+    {"id":"agency","label":"Agency channel","kind":"channel"},
+    {"id":"bancassurance","label":"Bancassurance","kind":"channel"},
+    {"id":"digital","label":"Digital channel","kind":"channel"},
+    {"id":"broker","label":"Broker channel","kind":"channel"},
+    {"id":"worksite","label":"Worksite channel","kind":"channel"}
+  ],
+  "edges":[
+    {"source":"agency","target":"growth","relation":"causality","label":"advisor-led acquisition"},
+    {"source":"bancassurance","target":"growth","relation":"causality","label":"partner referrals"},
+    {"source":"digital","target":"growth","relation":"causality","label":"digital acquisition"},
+    {"source":"broker","target":"growth","relation":"causality","label":"intermediary reach"},
+    {"source":"worksite","target":"growth","relation":"causality","label":"group customer access"}
+  ]
+}
