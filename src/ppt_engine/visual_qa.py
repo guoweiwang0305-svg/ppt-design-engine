@@ -76,3 +76,50 @@ def audit_design_ir(ir: DesignIR, min_font_pt: float | None = None,
             "Confirm all images, icons and logos have permitted provenance.",
         ],
     )
+
+
+class RenderedImageAudit(StrictModel):
+    image_path: str
+    width_px: int
+    height_px: int
+    non_white_ratio: float
+    luminance_p10: float
+    luminance_p90: float
+    luminance_spread: float
+    sampled_unique_colors: int
+    status: Literal["review_required", "warning", "blocked"]
+    issues: list[QAIssue] = Field(default_factory=list)
+    limitation: str = "Pixel statistics cannot judge semantic correctness, typography legibility or visual taste; inspect the PNG."
+
+
+def audit_rendered_png(image_path: str) -> RenderedImageAudit:
+    """Measure basic rendered-pixel health without pretending to perform OCR or aesthetic review."""
+    from pathlib import Path
+    from PIL import Image, ImageStat
+    path = Path(image_path)
+    if not path.exists():
+        raise FileNotFoundError(path)
+    image = Image.open(path).convert("RGB")
+    image.thumbnail((900, 900))
+    pixels = list(image.getdata())
+    total = max(1, len(pixels))
+    non_white = sum(1 for r, g, b in pixels if min(r, g, b) < 245) / total
+    luminance = sorted((0.2126*r + 0.7152*g + 0.0722*b) for r, g, b in pixels)
+    p10 = luminance[int((len(luminance)-1)*0.10)]
+    p90 = luminance[int((len(luminance)-1)*0.90)]
+    spread = p90 - p10
+    sampled = pixels[::max(1, len(pixels)//5000)]
+    unique = len(set(sampled))
+    issues = []
+    if non_white < 0.015:
+        issues.append(QAIssue(code="near_blank_render", severity="error", message="Rendered slide is almost entirely white."))
+    if spread < 28:
+        issues.append(QAIssue(code="low_global_contrast", severity="warning", message="Rendered slide has a low global luminance spread; inspect text and chart contrast."))
+    if min(image.size) < 500:
+        issues.append(QAIssue(code="low_render_resolution", severity="warning", message="Rendered image is small; rerender at presentation QA resolution."))
+    status = "blocked" if any(x.severity == "error" for x in issues) else ("warning" if issues else "review_required")
+    return RenderedImageAudit(image_path=str(path), width_px=Image.open(path).width,
+        height_px=Image.open(path).height, non_white_ratio=round(non_white,4),
+        luminance_p10=round(p10,2), luminance_p90=round(p90,2),
+        luminance_spread=round(spread,2), sampled_unique_colors=unique,
+        status=status, issues=issues)
