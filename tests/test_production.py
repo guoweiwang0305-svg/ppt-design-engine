@@ -1,5 +1,5 @@
 from ppt_engine.production import (
-    PageQualityScores, build_layout_plan, score_page, select_layout,
+    PageQualityScores, build_layout_plan, score_page, select_layout, layout_plan_to_design_ir,
 )
 from ppt_engine.intelligence import InformationGraph, InformationNode, InformationEdge
 from ppt_engine.models import RelationType
@@ -59,3 +59,20 @@ def test_layout_plan_preserves_unassigned_and_relation_review():
     assert plan.geometry_status == "needs_layout_resolution"
     assert len(plan.unresolved_relation_ids) == 3
     assert all(slot.geometry_token.startswith("gen.test.driver.") for slot in plan.slots)
+
+
+
+def test_geometry_resolves_and_compiles_editable_design_ir():
+    graph = sample_graph()
+    geometry = {"layouts": {"gen.test.driver": {"slots": {
+        "headline_conclusion": {"geometry": {"x": 0.5, "y": 0.2, "width": 12.0, "height": 0.6}},
+        "primary_driver": {"geometry": {"x": 0.5, "y": 1.2, "width": 5.8, "height": 2.0}},
+        "supporting_drivers": {"geometry": {"x": 6.5, "y": 1.2, "width": 6.0, "height": 4.0}, "arrangement": "grid", "max_items": 4}
+    }}}}
+    plan = build_layout_plan(graph, sample_catalog(), "gen.test.driver", geometry_catalog=geometry)
+    assert plan.geometry_status == "resolved"
+    ir = layout_plan_to_design_ir(graph, plan)
+    assert ir.slide_id == "gen.test.driver"
+    assert len(ir.nodes) == 5
+    assert len(ir.relations) == 3
+    assert all(node.geometry is not None for node in ir.nodes)
