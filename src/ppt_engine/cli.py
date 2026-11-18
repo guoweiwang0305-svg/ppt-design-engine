@@ -12,6 +12,7 @@ from .renderer import export_pdf, export_pngs, render_pptx
 from .pptx_parser import parse_pptx_to_json
 from .mining import PatternReview, apply_pattern_reviews, mine_patterns, save_pattern_review
 from .visual_intelligence import extract_visual_features
+from .production import PageQualityScores, score_page, select_layout, build_layout_plan
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
@@ -147,3 +148,56 @@ def extract_visual_features_command(
 
 if __name__ == "__main__":
     app()
+
+
+@app.command("score-page")
+def score_page_command(
+    review_file: Path,
+    output: Path = Path("build/reference_reviews/page_review.json"),
+):
+    """Calculate a page's weighted score from explicit human-entered dimensions."""
+    payload = json.loads(review_file.read_text(encoding="utf-8"))
+    scores = PageQualityScores.model_validate(payload["scores"])
+    review = score_page(
+        reference_id=payload["reference_id"], scores=scores,
+        evidence=payload.get("evidence", []), risks=payload.get("risks", []),
+        review_status=payload.get("review_status", "unreviewed"),
+        reviewer=payload.get("reviewer"), reviewer_notes=payload.get("reviewer_notes", ""),
+    )
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(review.model_dump_json(indent=2), encoding="utf-8")
+    typer.echo(f"{review.reference_id}: {review.weighted_total}/5 ({review.decision}) -> {output}")
+
+
+@app.command("select-layout")
+def select_layout_command(
+    graph_file: Path,
+    catalog_file: Path = Path("visual_patterns/generali/insurance_layout_catalog.json"),
+    density: str = "high",
+    top_k: int = 8,
+    output: Path = Path("build/layout_selection.json"),
+):
+    """Select Generali insurance layouts from an Information Graph."""
+    graph = InformationGraph.model_validate_json(graph_file.read_text(encoding="utf-8"))
+    catalog = json.loads(catalog_file.read_text(encoding="utf-8"))
+    result = select_layout(graph, catalog, requested_density=density, top_k=top_k)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(result.model_dump_json(indent=2), encoding="utf-8")
+    typer.echo(result.model_dump_json(indent=2))
+
+
+@app.command("build-layout-plan")
+def build_layout_plan_command(
+    graph_file: Path,
+    pattern_id: str,
+    catalog_file: Path = Path("visual_patterns/generali/insurance_layout_catalog.json"),
+    output: Path = Path("build/layout_plan.json"),
+):
+    """Bind Information Graph nodes to editable semantic layout slots."""
+    graph = InformationGraph.model_validate_json(graph_file.read_text(encoding="utf-8"))
+    catalog = json.loads(catalog_file.read_text(encoding="utf-8"))
+    plan = build_layout_plan(graph, catalog, pattern_id)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(plan.model_dump_json(indent=2), encoding="utf-8")
+    typer.echo(f"Layout plan -> {output}")
+\n\nif __name__ == "__main__":\n    app()\n
