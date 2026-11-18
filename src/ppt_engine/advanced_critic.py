@@ -116,6 +116,15 @@ def route_relations_orthogonal(ir: DesignIR, clearance: float=0.12) -> list[Rout
             [start,(end[0],start[1]),end],
             [start,(start[0],end[1]),end],
         ]
+        # Add detour channels just outside obstacle bounds; these are the
+        # meaningful alternatives missing from a simple two-bend router.
+        for obstacle in obstacles:
+            for channel_y in (obstacle.y-clearance, obstacle.y+obstacle.height+clearance):
+                if 0 <= channel_y <= ir.canvas.height:
+                    candidates.append([start,(start[0],channel_y),(end[0],channel_y),end])
+            for channel_x in (obstacle.x-clearance, obstacle.x+obstacle.width+clearance):
+                if 0 <= channel_x <= ir.canvas.width:
+                    candidates.append([start,(channel_x,start[1]),(channel_x,end[1]),end])
         valid=[]
         for pts in candidates:
             pts=[p for i,p in enumerate(pts) if i==0 or p!=pts[i-1]]
