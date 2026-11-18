@@ -1,0 +1,17 @@
+{
+  "graph_id": "insurance_customer_growth",
+  "thesis": "客户经营增长需要由客群识别、渠道协同与产品服务匹配共同驱动",
+  "nodes": [
+    {"id": "outcome", "label": "客户经营增长", "kind": "outcome", "importance": "critical"},
+    {"id": "driver_customer", "label": "识别高价值客群与真实需求", "kind": "primary_driver", "importance": "high", "evidence_ref": "research:customer-segmentation"},
+    {"id": "driver_channel", "label": "线上线下协同触达与服务", "kind": "primary_driver", "importance": "high", "evidence_ref": "research:channel-journey"},
+    {"id": "driver_product", "label": "产品与生命周期需求匹配", "kind": "primary_driver", "importance": "high", "evidence_ref": "research:product-fit"},
+    {"id": "evidence", "label": "用转化率、客均价值和服务使用率验证经营成效", "kind": "evidence", "importance": "medium", "evidence_ref": "analysis:validation-plan"}
+  ],
+  "edges": [
+    {"source": "driver_customer", "target": "outcome", "relation": "causality", "direction": "forward", "label": "精准识别"},
+    {"source": "driver_channel", "target": "outcome", "relation": "causality", "direction": "forward", "label": "协同触达"},
+    {"source": "driver_product", "target": "outcome", "relation": "causality", "direction": "forward", "label": "需求匹配"},
+    {"source": "evidence", "target": "outcome", "relation": "supports", "direction": "forward", "label": "成效验证"}
+  ]
+}
