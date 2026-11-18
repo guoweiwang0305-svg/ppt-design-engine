@@ -1,0 +1,70 @@
+{
+  "dataset_id": "insurance-reference-corpus-2026-11-18",
+  "source_policy": "User-uploaded source decks are retained as separate visual and semantic families. Generated assistant decks are excluded.",
+  "sources": [
+    {
+      "source_id": "aia-opening-red-savings",
+      "filename": "开门红储蓄型保险的“人、货、场”V2（广州AIA）.pptx",
+      "slides": 60,
+      "canvas_inches": [26.665, 15.0],
+      "visual_family": ["warm-neutral", "champagne-gold", "wealth-management-training"],
+      "semantic_families": ["customer-needs", "pension-opportunity", "product-structure", "regulation", "participating-policy-profit", "risk-management", "interest-rate-cycle", "asset-preservation", "wealth-succession"],
+      "candidate_layout_families": ["data-trend", "comparison-table", "customer-persona", "segmentation-pyramid", "asset-allocation", "lifecycle-map", "strategy-steps", "inheritance-relationship"],
+      "review_flags": ["Some slides contain dense text and small type; do not treat high density as quality.", "Numbers and claims require source/time/definition validation before reuse."]
+    },
+    {
+      "source_id": "gcl-alleanza-corporate",
+      "filename": "GCL + Alleanza Assicurazioni. 20thOct2026_v1(1).pptx",
+      "slides": 21,
+      "canvas_inches": [13.333, 7.5],
+      "visual_family": ["brand-red", "white", "charcoal", "enterprise-report"],
+      "semantic_families": ["company-profile", "growth", "regional-presence", "operating-kpis", "market-ranking", "customer-segmentation", "customer-tagging", "acquisition", "omo", "product-system", "health-ecosystem", "digital-service"],
+      "slide_map": {
+        "1": "company-cover",
+        "2": "agenda",
+        "3": "joint-venture-profile",
+        "4": "long-term-growth",
+        "5": "regional-presence",
+        "6": "key-figures-dashboard",
+        "7-9": "market-ranking-and-position",
+        "10": "customer-segmentation",
+        "11": "customer-profiling-and-tagging",
+        "12": "social-media-acquisition",
+        "13": "omo-journey",
+        "14": "product-life-stage-system",
+        "15": "health-management-ecosystem",
+        "17-19": "high-density-digital-and-service-content",
+        "16,20": "section-index"
+      },
+      "candidate_layout_families": ["executive-kpi-dashboard", "growth-timeline", "ranked-comparison", "regional-map", "segmentation-matrix", "tagging-taxonomy", "channel-funnel", "omo-journey", "product-life-stage-matrix", "ecosystem-map", "digital-service-stack"],
+      "review_flags": ["Slides 11 and 17-19 have very high element counts and require visual readability review.", "Repeated index pages should be evaluated against narrative necessity."]
+    }
+  ],
+  "external_reference_families": [
+    {
+      "name": "Generali Annual Integrated Report 2025",
+      "url": "https://www.generali.com/doc/jcr:d216ba07-1369-424a-b16b-335aa52f6c9d/Annual%20Integrated%20Report%20and%20Consolidated%20Financial%20Statements%202025_Generali%20Group_final_interactive.pdf",
+      "use": ["strategy-framework", "business-model", "annual-report-chart-grammar", "iconography"]
+    },
+    {
+      "name": "Generali FY25 presentation",
+      "url": "https://www.generali.com/doc/jcr:72997b15-9217-4c80-a775-6329c207d1f1/Generali%20FY25%20presentation_.pdf",
+      "use": ["investor-presentation", "agenda-layout", "financial-kpi", "year-on-year-chart", "red-grey-data-encoding"]
+    },
+    {
+      "name": "Generali strategy",
+      "url": "https://www.generali.com/investors/Strategy",
+      "use": ["strategy-narrative", "strategic-foundations", "growth-targets"]
+    },
+    {
+      "name": "Generali business model",
+      "url": "https://www.generali.com/who-we-are/our-business",
+      "use": ["business-model-logic", "multichannel-distribution", "insurance-and-asset-management"]
+    }
+  ],
+  "caveats": [
+    "This manifest is a source index and expert curation seed, not a claim that all 81 pages are approved patterns.",
+    "Generali palette values are approximations, not an official licensed brand standard.",
+    "Visual object extraction does not establish semantic meaning by itself."
+  ]
+}
