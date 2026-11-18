@@ -68,3 +68,13 @@ The Design IR is the canonical renderer-independent representation. AI makes sem
 - PDF conversion invokes `libreoffice` or `soffice`.
 - PNG conversion invokes `pdftoppm` from Poppler.
 - PDF/PNG export reports a clear dependency error when these executables are absent.
+
+## P0.7 — PPTX Reference Parser
+
+Parse editable PPTX source decks into normalized per-slide reference data:
+
+```bash
+uv run ppt-engine parse-pptx path/to/reference.pptx --output build/reference/reference.json
+```
+
+Extracts native text runs, geometry, shape/group hierarchy, fill/line styles, image crop metadata and connector geometry. See `docs/P0_7_PPTX_REFERENCE_PARSER.md` for boundaries and semantics-safety rules.
