@@ -1,5 +1,4 @@
-"P0.9 visual pattern intelligence module
-
+"""P0.9 visual pattern intelligence module.
 from __future__ import annotations
 import math, re
 from collections import Counter
