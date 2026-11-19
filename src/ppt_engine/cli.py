@@ -347,7 +347,11 @@ def score_visual_benchmark_command(
 ):
     """Score critic findings against human-labeled expected issue codes."""
     payload = json.loads(benchmark_file.read_text(encoding="utf-8"))
-    cases = [VisualBenchmarkCase.model_validate(item) for item in payload["cases"]]
+    allowed = set(VisualBenchmarkCase.model_fields.keys())
+    cases = [
+        VisualBenchmarkCase.model_validate({key: value for key, value in item.items() if key in allowed})
+        for item in payload["cases"]
+    ]
     report = score_visual_benchmark(cases)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
