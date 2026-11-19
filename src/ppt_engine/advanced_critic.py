@@ -215,7 +215,8 @@ def _split_suggestion(ir: DesignIR) -> PageSplitSuggestion | None:
 
 
 def critique_slide(ir: DesignIR, rendered_png: str | None=None,
-                   ledger: DataLedger | None=None) -> AdvancedCriticReport:
+                   ledger: DataLedger | None=None,
+                   ocr_language: str="eng") -> AdvancedCriticReport:
     findings=_hierarchy(ir)+_layout_findings(ir)
     qa=audit_design_ir(ir)
     for issue in qa.issues:
@@ -230,7 +231,7 @@ def critique_slide(ir: DesignIR, rendered_png: str | None=None,
         visual_critique=analyze_rendered_png(ir, rendered_png).model_dump(mode="json")
         for finding in visual_critique["findings"]:
             findings.append(finding)
-        ocr_report=critique_rendered_text(ir, rendered_png, ledger=ledger).model_dump(mode="json")
+        ocr_report=critique_rendered_text(ir, rendered_png, language=ocr_language, ledger=ledger).model_dump(mode="json")
         for finding in ocr_report["findings"]:
             if finding["severity"] != "info":
                 findings.append(finding)
