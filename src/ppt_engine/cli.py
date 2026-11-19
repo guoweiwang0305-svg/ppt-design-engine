@@ -19,6 +19,7 @@ from .advanced_critic import critique_slide
 from .image_critic import analyze_rendered_png
 from .visual_benchmark import VisualBenchmarkCase, score_visual_benchmark
 from .quality_loop import run_quality_loop
+from .vision_benchmark_runner import run_manifest
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
@@ -356,6 +357,28 @@ def score_visual_benchmark_command(
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
     typer.echo(report.model_dump_json(indent=2))
+
+
+@app.command("run-vision-benchmark")
+def run_vision_benchmark_command(
+    manifest_file: Path,
+    image_dir: Path,
+    output: Path = Path("build/qa/gcl-aia-vision-benchmark.json"),
+):
+    """Run one pinned OpenAI-compatible vision model over every reviewed manifest page."""
+    from .vision_benchmark_runner import run_manifest
+
+    try:
+        report = run_manifest(manifest_file, image_dir, output)
+    except (ValueError, FileNotFoundError, RuntimeError) as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    typer.echo(json.dumps({
+        "provider": report["provider"],
+        "model": report["model"],
+        "case_count": report["case_count"],
+        "score": report["score"],
+        "output": str(output),
+    }, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
