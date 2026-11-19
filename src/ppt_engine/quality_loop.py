@@ -2,6 +2,7 @@
 from __future__ import annotations
 from pathlib import Path
 from pydantic import Field
+from .models import StrictModel
 from .models import DesignIR
 from .ledger import DataLedger
 from .optimization import optimize_layout, RepairAction
