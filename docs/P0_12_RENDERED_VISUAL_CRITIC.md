@@ -57,3 +57,16 @@ The `quality-loop` command now runs both global PNG health and region-level rast
 ## Acceptance target
 
 P0.12 is not considered complete merely because tests pass. It needs a curated visual benchmark of representative slide types (cover, KPI, chart, process, matrix, image-led, dense data, dark-background) with human-labeled findings, false-positive review, and before/after rendered comparisons. Human approval remains mandatory.
+
+
+## Optional OCR verification
+
+If the Tesseract executable is installed, the Advanced Critic also runs OCR over the rendered PNG and maps recognized word boxes back to DesignIR text regions. It reports missing/partial text and words that cross a region boundary. The CLI accepts the same DataLedger used by the renderer so metric nodes are compared against their resolved displayed values:
+
+```bash
+uv run ppt-engine advanced-critic build/design_ir/compiled-slide.json \
+  --rendered-png build/export/png/slide-1.png \
+  --ledger-file build/data_ledger.json
+```
+
+Tesseract is optional. If unavailable, the report explicitly records `ocr_unavailable`. OCR language defaults to English; Chinese or multilingual decks require the corresponding Tesseract language data and a future CLI language option. OCR findings are advisory because stylized type, small labels and charts can produce false positives.
