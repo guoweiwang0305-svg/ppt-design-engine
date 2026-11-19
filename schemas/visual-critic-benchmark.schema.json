@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/visual-critic-benchmark.schema.json",
+  "title": "Visual Critic Human-Labeled Benchmark",
+  "type": "object",
+  "required": ["cases"],
+  "properties": {
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["case_id", "slide_type", "expected_issue_codes", "observed_issue_codes"],
+        "properties": {
+          "case_id": {"type": "string", "minLength": 1},
+          "slide_type": {"type": "string", "minLength": 1},
+          "expected_issue_codes": {"type": "array", "items": {"type": "string"}},
+          "observed_issue_codes": {"type": "array", "items": {"type": "string"}},
+          "reviewer_notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
