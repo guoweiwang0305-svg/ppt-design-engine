@@ -17,3 +17,19 @@ def test_benchmark_reports_precision_recall_and_false_positives():
     assert score.precision==round(2/3,4)
     assert score.recall==round(2/3,4)
     assert score.by_slide_type["chart"]["recall"]==0.5
+
+
+def test_pending_expert_labels_are_excluded_from_metrics():
+    cases=[
+        VisualBenchmarkCase(case_id="reviewed",slide_type="cover",
+            expected_issue_codes=["weak_visual_hierarchy"],
+            observed_issue_codes=["weak_visual_hierarchy"],review_status="reviewed"),
+        VisualBenchmarkCase(case_id="pending",slide_type="chart",
+            expected_issue_codes=[],observed_issue_codes=["chart_encoding_unclear"],
+            review_status="pending_expert_review"),
+    ]
+    score=score_visual_benchmark(cases)
+    assert score.cases==1
+    assert score.pending_cases==1
+    assert score.false_positive==0
+    assert score.recall==1.0
