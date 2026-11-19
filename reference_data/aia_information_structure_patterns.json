@@ -1,0 +1,130 @@
+{
+  "profile_id": "aia_information_structure_reference_v1",
+  "source_family": "AIA",
+  "purpose": "Reusable information architecture and diagram grammar extracted from 19 AIA reference pages; not a visual brand/style profile.",
+  "provenance": {
+    "review_set": "gcl-aia-visual-critic-review-set-2026-11-19",
+    "review_status": "provisional GPT-6 visual expert pass; independent human adjudication pending"
+  },
+  "patterns": [
+    {
+      "id": "dual_trend_comparison",
+      "source_pages": [
+        "AIA:slide-03",
+        "AIA:slide-08"
+      ],
+      "relationship": "parallel time-series comparison",
+      "use_when": "Compare two market indicators or several providers over a shared time range.",
+      "rules": [
+        "Use shared time scale where comparable.",
+        "Label units and source per chart.",
+        "Add one conclusion band outside plot area.",
+        "Avoid too many series; highlight focal series."
+      ]
+    },
+    {
+      "id": "mix_plus_product_matrix",
+      "source_pages": [
+        "AIA:slide-19",
+        "AIA:slide-28"
+      ],
+      "relationship": "composition plus structured breakdown",
+      "use_when": "Explain market/product mix and connect it to product or balance-sheet detail.",
+      "rules": [
+        "Use pie/donut only for a small number of mutually exclusive parts.",
+        "Pair with table only when table answers a distinct follow-up question.",
+        "Keep labels and legend readable; avoid duplicating percentages."
+      ]
+    },
+    {
+      "id": "radial_segment_map",
+      "source_pages": [
+        "AIA:slide-11",
+        "AIA:slide-47"
+      ],
+      "relationship": "central concept to surrounding categories",
+      "use_when": "Show a central capability/persona surrounded by 5–7 related dimensions.",
+      "rules": [
+        "Center label names the organizing concept.",
+        "Each spoke should be parallel in grammar and length.",
+        "Keep explanatory copy outside the radial icon ring."
+      ]
+    },
+    {
+      "id": "tree_decomposition",
+      "source_pages": [
+        "AIA:slide-22"
+      ],
+      "relationship": "root cause or value decomposition",
+      "use_when": "Break a total into branches, drivers and explanatory factors.",
+      "rules": [
+        "Root is the outcome/total.",
+        "Branches represent mutually distinguishable drivers.",
+        "Leaf text explains mechanism, not restates category."
+      ]
+    },
+    {
+      "id": "tiered_pyramid",
+      "source_pages": [
+        "AIA:slide-17"
+      ],
+      "relationship": "hierarchical segmentation",
+      "use_when": "Explain population tiers, service tiers or capability maturity.",
+      "rules": [
+        "Define the dimension that determines tier placement.",
+        "Keep each tier concise and labels aligned.",
+        "Place detailed evidence in a side column or next page."
+      ]
+    },
+    {
+      "id": "stage_process",
+      "source_pages": [
+        "AIA:slide-22",
+        "GCL:slide-12",
+        "GCL:slide-13"
+      ],
+      "relationship": "ordered process / operating flow",
+      "use_when": "Explain sequential actions, online-offline handoffs or conversion.",
+      "rules": [
+        "Use one unambiguous direction.",
+        "Distinguish stages from feedback loops.",
+        "Label handoff and outcome explicitly.",
+        "Do not overload nodes with paragraphs."
+      ]
+    },
+    {
+      "id": "image_plus_evidence",
+      "source_pages": [
+        "AIA:slide-36"
+      ],
+      "relationship": "human context plus quantitative evidence",
+      "use_when": "Pair a human or social context image with a time-series or quantitative proof.",
+      "rules": [
+        "Image establishes context, not decoration.",
+        "Chart must independently support the claim.",
+        "Use one concise takeaway to connect emotional and analytical evidence."
+      ]
+    },
+    {
+      "id": "multi_axis_framework",
+      "source_pages": [
+        "AIA:slide-10"
+      ],
+      "relationship": "multi-dimensional segmentation",
+      "use_when": "Classify segments using two or three explicit dimensions.",
+      "rules": [
+        "Prefer 2D matrix when axes are categorical.",
+        "If 3D perspective is used, label all axes and explain how cells map to categories.",
+        "Avoid perspective depth as a substitute for clear relationship encoding."
+      ]
+    }
+  ],
+  "anti_patterns": [
+    "annotations covering plot data",
+    "3D perspective without explicit axis semantics",
+    "tables with footnotes colliding with final rows",
+    "long explanatory paragraphs inside pyramid tiers",
+    "multiple independent claims competing on one page"
+  ],
+  "style_transfer_policy": "Do not copy AIA beige/gold palette, logo, typography or decorative language into GCL style. Transfer only semantic structure and diagram grammar."
+}
