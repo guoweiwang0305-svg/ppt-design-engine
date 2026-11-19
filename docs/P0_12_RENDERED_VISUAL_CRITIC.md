@@ -66,7 +66,8 @@ If the Tesseract executable is installed, the Advanced Critic also runs OCR over
 ```bash
 uv run ppt-engine advanced-critic build/design_ir/compiled-slide.json \
   --rendered-png build/export/png/slide-1.png \
-  --ledger-file build/data_ledger.json
+  --ledger-file build/data_ledger.json \\
+  --ocr-language chi_sim+eng
 ```
 
-Tesseract is optional. If unavailable, the report explicitly records `ocr_unavailable`. OCR language defaults to English; Chinese or multilingual decks require the corresponding Tesseract language data and a future CLI language option. OCR findings are advisory because stylized type, small labels and charts can produce false positives.
+Tesseract is optional. If unavailable, the report explicitly records `ocr_unavailable`. OCR language defaults to English; use `--ocr-language chi_sim+eng` for Chinese/English when the corresponding Tesseract language data is installed. OCR findings are advisory because stylized type, small labels and charts can produce false positives.
