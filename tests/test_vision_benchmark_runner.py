@@ -64,6 +64,10 @@ def test_run_manifest_scores_all_cases_and_persists_predictions(tmp_path):
     assert report["score"]["true_positive"] == 1
     assert report["score"]["false_positive"] == 1
     assert report["score"]["false_negative"] == 0
+    assert report["error_analysis"]["false_positive_by_page_type"][0] == {
+        "name": "GCL::chart", "count": 1
+    }
+    assert report["error_analysis"]["false_negative_by_page_type"] == []
     saved = json.loads(output.read_text(encoding="utf-8"))
     assert len(saved["predictions"]) == 2
     assert saved["provider"] == "test-provider"
