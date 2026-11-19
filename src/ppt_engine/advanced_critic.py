@@ -6,6 +6,7 @@ from .models import DesignIR, StrictModel
 from .visual_qa import audit_design_ir, audit_rendered_png
 from .image_critic import analyze_rendered_png
 from .ocr_critic import critique_rendered_text
+from .ledger import DataLedger
 
 
 class GeometrySuggestion(StrictModel):
@@ -213,7 +214,8 @@ def _split_suggestion(ir: DesignIR) -> PageSplitSuggestion | None:
         recommendation="Keep thesis and decision-critical evidence on this page; move secondary detail to a follow-up page. Confirm narrative continuity before splitting.")
 
 
-def critique_slide(ir: DesignIR, rendered_png: str | None=None) -> AdvancedCriticReport:
+def critique_slide(ir: DesignIR, rendered_png: str | None=None,
+                   ledger: DataLedger | None=None) -> AdvancedCriticReport:
     findings=_hierarchy(ir)+_layout_findings(ir)
     qa=audit_design_ir(ir)
     for issue in qa.issues:
@@ -228,7 +230,7 @@ def critique_slide(ir: DesignIR, rendered_png: str | None=None) -> AdvancedCriti
         visual_critique=analyze_rendered_png(ir, rendered_png).model_dump(mode="json")
         for finding in visual_critique["findings"]:
             findings.append(finding)
-        ocr_report=critique_rendered_text(ir, rendered_png).model_dump(mode="json")
+        ocr_report=critique_rendered_text(ir, rendered_png, ledger=ledger).model_dump(mode="json")
         for finding in ocr_report["findings"]:
             if finding["severity"] != "info":
                 findings.append(finding)
