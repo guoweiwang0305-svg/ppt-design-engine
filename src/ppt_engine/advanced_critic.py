@@ -4,6 +4,7 @@ from typing import Literal
 from pydantic import Field
 from .models import DesignIR, StrictModel
 from .visual_qa import audit_design_ir, audit_rendered_png
+from .image_critic import analyze_rendered_png
 
 
 class GeometrySuggestion(StrictModel):
@@ -37,6 +38,7 @@ class AdvancedCriticReport(StrictModel):
     routed_relations: list[RoutedRelation] = Field(default_factory=list)
     page_split: PageSplitSuggestion | None = None
     rendered_image_audit: dict | None = None
+    rendered_visual_critique: dict | None = None
     human_review_required: bool = True
 
 
@@ -217,8 +219,12 @@ def critique_slide(ir: DesignIR, rendered_png: str | None=None) -> AdvancedCriti
             "node_ids":issue.node_ids,"diagnosis":issue.message,
             "recommendation":"Resolve the geometry/font issue and rerun preflight."})
     image_audit=None
+    visual_critique=None
     if rendered_png:
         image_audit=audit_rendered_png(rendered_png).model_dump(mode="json")
+        visual_critique=analyze_rendered_png(ir, rendered_png).model_dump(mode="json")
+        for finding in visual_critique["findings"]:
+            findings.append(finding)
         for issue in image_audit["issues"]:
             findings.append({"code":issue["code"],"severity":"blocker" if issue["severity"]=="error" else "minor",
                 "node_ids":[],"diagnosis":issue["message"],
@@ -234,4 +240,5 @@ def critique_slide(ir: DesignIR, rendered_png: str | None=None) -> AdvancedCriti
     else: decision="accept_for_human_review"
     return AdvancedCriticReport(slide_id=ir.slide_id,decision=decision,findings=findings,
         geometry_suggestions=propose_collision_repairs(ir),routed_relations=routes,
-        page_split=_split_suggestion(ir),rendered_image_audit=image_audit,human_review_required=True)
+        page_split=_split_suggestion(ir),rendered_image_audit=image_audit,
+        rendered_visual_critique=visual_critique,human_review_required=True)
