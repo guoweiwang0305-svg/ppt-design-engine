@@ -33,3 +33,21 @@ def test_pending_expert_labels_are_excluded_from_metrics():
     assert score.pending_cases==1
     assert score.false_positive==0
     assert score.recall==1.0
+
+
+def test_benchmark_splits_identical_slide_types_by_source_family():
+    cases = [
+        VisualBenchmarkCase(
+            case_id="gcl-cover", source_family="GCL", slide_type="cover",
+            expected_issue_codes=["weak_visual_hierarchy"],
+            observed_issue_codes=["weak_visual_hierarchy"],
+        ),
+        VisualBenchmarkCase(
+            case_id="aia-cover", source_family="AIA", slide_type="cover",
+            expected_issue_codes=["chart_encoding_unclear"],
+            observed_issue_codes=[],
+        ),
+    ]
+    score = score_visual_benchmark(cases)
+    assert score.by_source_and_slide_type["GCL::cover"]["f1"] == 1.0
+    assert score.by_source_and_slide_type["AIA::cover"]["fn"] == 1
