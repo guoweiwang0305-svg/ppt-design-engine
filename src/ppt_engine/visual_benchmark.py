@@ -30,6 +30,7 @@ class BenchmarkScore(StrictModel):
     false_positive_codes: list[str] = Field(default_factory=list)
     missed_issue_codes: list[str] = Field(default_factory=list)
     by_slide_type: dict[str, dict] = Field(default_factory=dict)
+    by_source_and_slide_type: dict[str, dict] = Field(default_factory=dict)
 
 
 def score_visual_benchmark(cases: list[VisualBenchmarkCase]) -> BenchmarkScore:
@@ -37,6 +38,7 @@ def score_visual_benchmark(cases: list[VisualBenchmarkCase]) -> BenchmarkScore:
     false_positive_codes=[]
     missed_codes=[]
     groups: dict[str,dict[str,int]]={}
+    source_groups: dict[str,dict[str,int]]={}
     reviewed_cases=[case for case in cases if case.review_status == "reviewed"]
     for case in reviewed_cases:
         expected=set(case.expected_issue_codes)
@@ -49,6 +51,9 @@ def score_visual_benchmark(cases: list[VisualBenchmarkCase]) -> BenchmarkScore:
         missed_codes.extend(sorted(expected-observed))
         group=groups.setdefault(case.slide_type,{"tp":0,"fp":0,"fn":0})
         group["tp"]+=ctp; group["fp"]+=cfp; group["fn"]+=cfn
+        source_key=f"{case.source_family or 'unspecified'}::{case.slide_type}"
+        source_group=source_groups.setdefault(source_key,{"tp":0,"fp":0,"fn":0})
+        source_group["tp"]+=ctp; source_group["fp"]+=cfp; source_group["fn"]+=cfn
     precision=tp/(tp+fp) if tp+fp else (1.0 if fn==0 else 0.0)
     recall=tp/(tp+fn) if tp+fn else 1.0
     f1=2*precision*recall/(precision+recall) if precision+recall else 0.0
@@ -58,7 +63,13 @@ def score_visual_benchmark(cases: list[VisualBenchmarkCase]) -> BenchmarkScore:
         r=counts["tp"]/(counts["tp"]+counts["fn"]) if counts["tp"]+counts["fn"] else 1.0
         by_type[name]={**counts,"precision":round(p,4),"recall":round(r,4),
                        "f1":round(2*p*r/(p+r),4) if p+r else 0.0}
+    by_source_type={}
+    for name,counts in source_groups.items():
+        p=counts["tp"]/(counts["tp"]+counts["fp"]) if counts["tp"]+counts["fp"] else 1.0
+        r=counts["tp"]/(counts["tp"]+counts["fn"]) if counts["tp"]+counts["fn"] else 1.0
+        by_source_type[name]={**counts,"precision":round(p,4),"recall":round(r,4),
+                              "f1":round(2*p*r/(p+r),4) if p+r else 0.0}
     return BenchmarkScore(cases=len(reviewed_cases),pending_cases=len(cases)-len(reviewed_cases),true_positive=tp,false_positive=fp,
         false_negative=fn,precision=round(precision,4),recall=round(recall,4),
         f1=round(f1,4),false_positive_codes=false_positive_codes,
-        missed_issue_codes=missed_codes,by_slide_type=by_type)
+        missed_issue_codes=missed_codes,by_slide_type=by_type,by_source_and_slide_type=by_source_type)
