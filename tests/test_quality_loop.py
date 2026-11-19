@@ -39,4 +39,6 @@ def test_quality_loop_renders_then_runs_png_critic(tmp_path, monkeypatch):
     assert result.pdf_path.endswith("quality.pdf")
     assert result.png_paths
     assert result.critic.rendered_image_audit is not None
+    assert result.critic.rendered_visual_critique is not None
+    assert result.critic.rendered_visual_critique['analyzed_regions'] == 1
     assert result.design_ir.message.thesis=="One clear point"
