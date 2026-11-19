@@ -16,7 +16,7 @@ Implemented:
 Not yet implemented:
 - Full-deck composition and page sequencing
 - Native chart rendering, image placement/cropping and connector routing
-- Automated visual critique / perceptual QA
+- Region-level rendered raster critique (P0.12 heuristic; no OCR or learned vision model)
 - Agent provider integration
 - Pitch API adapter
 - robust concurrent project locking and migration tooling
@@ -181,3 +181,20 @@ uv run ppt-engine quality-loop build/design_ir/compiled-slide.json \
 ```
 
 This produces editable PPTX, PDF, PNG, final DesignIR and a structured critic report. Only bounded text-fit adjustments are automatic; geometry changes and slide splits remain reviewable suggestions.
+
+
+## P0.12 — Rendered Visual Critic
+
+P0.12 analyzes actual rendered PNG pixels and maps the results back to DesignIR text regions. It measures region ink occupancy, edge crowding, contrast proxies, global visual mass and quadrant density. It supports light text on dark panels using local-background foreground detection.
+
+```bash
+uv run ppt-engine image-critic build/design_ir/compiled-slide.json \
+  build/export/png/slide-1.png \
+  --output build/qa/rendered-visual-critique.json
+
+uv run ppt-engine quality-loop build/design_ir/compiled-slide.json \
+  --output-dir build/quality \
+  --max-rounds 4
+```
+
+This is an explainable raster preflight, not OCR or a learned vision model. It cannot verify wording, chart semantics, photo crop meaning or aesthetic quality. Findings are reviewable evidence; no geometry or content is silently rewritten. See [P0.12 Rendered Visual Critic](docs/P0_12_RENDERED_VISUAL_CRITIC.md).
