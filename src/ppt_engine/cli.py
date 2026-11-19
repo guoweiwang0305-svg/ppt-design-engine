@@ -285,11 +285,12 @@ def advanced_critic_command(
     rendered_png: Path | None = typer.Option(None, help="Optional rendered PNG for pixel-level post-render audit."),
     output: Path = Path("build/qa/advanced-critic.json"),
     ledger_file: Path | None = typer.Option(None, help="DataLedger for verifying rendered metric text."),
+    ocr_language: str = typer.Option("eng", help="Tesseract language code, e.g. eng or chi_sim+eng."),
 ):
     """Run hierarchy, collision, connector-routing and density diagnostics."""
     ir = DesignIR.model_validate_json(ir_file.read_text(encoding="utf-8"))
     ledger = DataLedger.load(ledger_file) if ledger_file else None
-    report = critique_slide(ir, str(rendered_png) if rendered_png else None, ledger=ledger)
+    report = critique_slide(ir, str(rendered_png) if rendered_png else None, ledger=ledger, ocr_language=ocr_language)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
     typer.echo(report.model_dump_json(indent=2))
