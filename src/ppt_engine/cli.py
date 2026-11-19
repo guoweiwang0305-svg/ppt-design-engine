@@ -19,7 +19,6 @@ from .advanced_critic import critique_slide
 from .image_critic import analyze_rendered_png
 from .visual_benchmark import VisualBenchmarkCase, score_visual_benchmark
 from .quality_loop import run_quality_loop
-from .vision_benchmark_runner import run_manifest
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
 project_app = typer.Typer(help="Project lifecycle commands")
