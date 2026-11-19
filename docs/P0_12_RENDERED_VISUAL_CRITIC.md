@@ -71,3 +71,15 @@ uv run ppt-engine advanced-critic build/design_ir/compiled-slide.json \
 ```
 
 Tesseract is optional. If unavailable, the report explicitly records `ocr_unavailable`. OCR language defaults to English; use `--ocr-language chi_sim+eng` for Chinese/English when the corresponding Tesseract language data is installed. OCR findings are advisory because stylized type, small labels and charts can produce false positives.
+
+
+## Human-labeled calibration benchmark
+
+A critic must be evaluated against human judgment before its warnings are trusted. P0.12 adds a benchmark format and scorer:
+
+```bash
+uv run ppt-engine score-visual-benchmark examples/visual_critic_benchmark.template.json \
+  --output build/qa/visual-benchmark-score.json
+```
+
+Each case records the slide type, expert-expected issue codes and critic-observed issue codes. The scorer reports precision, recall, F1, false positives, missed issues and per-slide-type metrics. The included file is only a template, not a populated benchmark; it must be filled using expert-reviewed rendered slides before thresholds are calibrated.
