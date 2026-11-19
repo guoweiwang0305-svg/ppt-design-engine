@@ -71,9 +71,13 @@ From the repository root, after extracting the 35 PNGs into `tools/expert_review
 uv run ppt-engine run-vision-benchmark \
   tools/expert_review_desk/manifest.json \
   tools/expert_review_desk/visual_test_set \
-  --output build/qa/gcl-aia-vision-benchmark.json
+  --output build/qa/gcl-aia-vision-benchmark.json \\
+  --allow-provisional-labels
 ```
 
 The runner refuses to start while any page is pending expert review, verifies that provider/model identity stays constant across the batch, uses temperature 0, saves each full model response, and emits a scored report with source-family × slide-type metrics. If a request fails or the model identity changes, the run stops rather than silently mixing models.
 
 For a custom vendor, implement the `VisionCriticProvider` protocol or expose an OpenAI-compatible `/chat/completions` endpoint. API keys must never be committed to Git or placed in the static review UI. Provider-specific image detail, token limits, retention and data residency remain the user's responsibility; confirm these with the provider before sending proprietary slide images.
+
+
+`--allow-provisional-labels` is an explicit exploratory opt-in. The current 35-page manifest contains AI-assisted provisional labels, so without this flag the runner blocks scoring. Outputs are marked `exploratory_only`; do not report them as gold-label model accuracy until independent human adjudication is complete. The runner also rejects model issue codes outside the dataset taxonomy.
