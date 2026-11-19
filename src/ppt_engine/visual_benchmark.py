@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 from typing import Literal
+
 from pydantic import Field
+
 from .models import StrictModel
 
 
@@ -33,43 +35,77 @@ class BenchmarkScore(StrictModel):
     by_source_and_slide_type: dict[str, dict] = Field(default_factory=dict)
 
 
+def _metrics(counts: dict[str, int]) -> dict[str, float | int]:
+    tp = counts["tp"]
+    fp = counts["fp"]
+    fn = counts["fn"]
+    precision = tp / (tp + fp) if tp + fp else (1.0 if fn == 0 else 0.0)
+    recall = tp / (tp + fn) if tp + fn else 1.0
+    f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
+    return {
+        **counts,
+        "precision": round(precision, 4),
+        "recall": round(recall, 4),
+        "f1": round(f1, 4),
+    }
+
+
 def score_visual_benchmark(cases: list[VisualBenchmarkCase]) -> BenchmarkScore:
-    tp=fp=fn=0
-    false_positive_codes=[]
-    missed_codes=[]
-    groups: dict[str,dict[str,int]]={}
-    source_groups: dict[str,dict[str,int]]={}
-    reviewed_cases=[case for case in cases if case.review_status == "reviewed"]
+    tp = 0
+    fp = 0
+    fn = 0
+    false_positive_codes: list[str] = []
+    missed_codes: list[str] = []
+    groups: dict[str, dict[str, int]] = {}
+    source_groups: dict[str, dict[str, int]] = {}
+
+    reviewed_cases = [case for case in cases if case.review_status == "reviewed"]
+
     for case in reviewed_cases:
-        expected=set(case.expected_issue_codes)
-        observed=set(case.observed_issue_codes)
-        ctp=len(expected & observed)
-        cfp=len(observed - expected)
-        cfn=len(expected - observed)
-        tp+=ctp; fp+=cfp; fn+=cfn
-        false_positive_codes.extend(sorted(observed-expected))
-        missed_codes.extend(sorted(expected-observed))
-        group=groups.setdefault(case.slide_type,{"tp":0,"fp":0,"fn":0})
-        group["tp"]+=ctp; group["fp"]+=cfp; group["fn"]+=cfn
-        source_key=f"{case.source_family or 'unspecified'}::{case.slide_type}"
-        source_group=source_groups.setdefault(source_key,{"tp":0,"fp":0,"fn":0})
-        source_group["tp"]+=ctp; source_group["fp"]+=cfp; source_group["fn"]+=cfn
-    precision=tp/(tp+fp) if tp+fp else (1.0 if fn==0 else 0.0)
-    recall=tp/(tp+fn) if tp+fn else 1.0
-    f1=2*precision*recall/(precision+recall) if precision+recall else 0.0
-    by_type={}
-    for name,counts in groups.items():
-        p=counts["tp"]/(counts["tp"]+counts["fp"]) if counts["tp"]+counts["fp"] else 1.0
-        r=counts["tp"]/(counts["tp"]+counts["fn"]) if counts["tp"]+counts["fn"] else 1.0
-        by_type[name]={**counts,"precision":round(p,4),"recall":round(r,4),
-                       "f1":round(2*p*r/(p+r),4) if p+r else 0.0}
-    by_source_type={}
-    for name,counts in source_groups.items():
-        p=counts["tp"]/(counts["tp"]+counts["fp"]) if counts["tp"]+counts["fp"] else 1.0
-        r=counts["tp"]/(counts["tp"]+counts["fn"]) if counts["tp"]+counts["fn"] else 1.0
-        by_source_type[name]={**counts,"precision":round(p,4),"recall":round(r,4),
-                              "f1":round(2*p*r/(p+r),4) if p+r else 0.0}
-    return BenchmarkScore(cases=len(reviewed_cases),pending_cases=len(cases)-len(reviewed_cases),true_positive=tp,false_positive=fp,
-        false_negative=fn,precision=round(precision,4),recall=round(recall,4),
-        f1=round(f1,4),false_positive_codes=false_positive_codes,
-        missed_issue_codes=missed_codes,by_slide_type=by_type,by_source_and_slide_type=by_source_type)
+        expected = set(case.expected_issue_codes)
+        observed = set(case.observed_issue_codes)
+        case_tp = len(expected & observed)
+        case_fp = len(observed - expected)
+        case_fn = len(expected - observed)
+
+        tp += case_tp
+        fp += case_fp
+        fn += case_fn
+        false_positive_codes.extend(sorted(observed - expected))
+        missed_codes.extend(sorted(expected - observed))
+
+        slide_group = groups.setdefault(
+            case.slide_type, {"tp": 0, "fp": 0, "fn": 0}
+        )
+        slide_group["tp"] += case_tp
+        slide_group["fp"] += case_fp
+        slide_group["fn"] += case_fn
+
+        source_key = f"{case.source_family or 'unspecified'}::{case.slide_type}"
+        source_group = source_groups.setdefault(
+            source_key, {"tp": 0, "fp": 0, "fn": 0}
+        )
+        source_group["tp"] += case_tp
+        source_group["fp"] += case_fp
+        source_group["fn"] += case_fn
+
+    total = _metrics({"tp": tp, "fp": fp, "fn": fn})
+    by_slide_type = {name: _metrics(counts) for name, counts in groups.items()}
+    by_source_and_slide_type = {
+        name: _metrics(counts) for name, counts in source_groups.items()
+    }
+
+    return BenchmarkScore(
+        cases=len(reviewed_cases),
+        pending_cases=len(cases) - len(reviewed_cases),
+        true_positive=tp,
+        false_positive=fp,
+        false_negative=fn,
+        precision=float(total["precision"]),
+        recall=float(total["recall"]),
+        f1=float(total["f1"]),
+        false_positive_codes=false_positive_codes,
+        missed_issue_codes=missed_codes,
+        by_slide_type=by_slide_type,
+        by_source_and_slide_type=by_source_and_slide_type,
+    )
