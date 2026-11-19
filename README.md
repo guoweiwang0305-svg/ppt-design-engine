@@ -169,7 +169,7 @@ uv run ppt-engine advanced-critic build/design_ir/optimized-slide.json \
   --output build/qa/advanced-critic.json
 ```
 
-Python API: `ppt_engine.advanced_critic.critique_slide`. Geometry repairs are suggestions only; orthogonal routes are returned as proposals and do not silently mutate DesignIR. Density warnings recommend a primary/secondary split but never split or delete content automatically. Human review remains mandatory.
+Python API: `ppt_engine.advanced_critic.critique_slide`. Geometry repairs are suggestions only; orthogonal routes are consumed by the PPTX renderer as editable line segments without mutating DesignIR. Density warnings recommend a primary/secondary split but never split or delete content automatically. Human review remains mandatory.
 
 
 ### End-to-end render and critic loop
