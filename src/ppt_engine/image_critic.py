@@ -7,6 +7,7 @@ global visual balance while keeping every finding traceable to a region/node.
 from __future__ import annotations
 
 from pathlib import Path
+from statistics import median
 from typing import Literal
 
 from PIL import Image, ImageStat
@@ -54,8 +55,35 @@ def _luminance(image: Image.Image) -> Image.Image:
     return image.convert("L")
 
 
-def _ink_mask(image: Image.Image, threshold: int = 218) -> Image.Image:
-    return _luminance(image).point(lambda value: 255 if value < threshold else 0)
+def _ink_mask(image: Image.Image, threshold: int = 42) -> Image.Image:
+    """Detect foreground pixels relative to the local border background.
+
+    Unlike a fixed dark-pixel threshold, this also handles white text on dark
+    panels. It remains a coarse foreground mask, not OCR.
+    """
+    rgb=image.convert("RGB")
+    w,h=rgb.size
+    if not w or not h:
+        return Image.new("L",rgb.size,0)
+    border=[]
+    step=max(1,min(w,h)//80)
+    for x in range(0,w,step):
+        border.append(rgb.getpixel((x,0)))
+        border.append(rgb.getpixel((x,h-1)))
+    for y in range(0,h,step):
+        border.append(rgb.getpixel((0,y)))
+        border.append(rgb.getpixel((w-1,y)))
+    background=tuple(median(pixel[channel] for pixel in border) for channel in range(3))
+    mask=Image.new("L",rgb.size,0)
+    src=rgb.load()
+    dst=mask.load()
+    for y in range(h):
+        for x in range(w):
+            pixel=src[x,y]
+            distance=sum(abs(pixel[channel]-background[channel]) for channel in range(3))
+            if distance >= threshold:
+                dst[x,y]=255
+    return mask
 
 
 def _ratio(mask: Image.Image) -> float:
