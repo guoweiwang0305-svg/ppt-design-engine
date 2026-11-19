@@ -1,0 +1,17 @@
+{
+  "rubric_id":"aia-information-organization-baseline-1.0","source_family":"AIA","status":"rubric_defined_labels_pending",
+  "purpose":"Expert calibration rubric for 19 AIA pages; information structure reference only, not GCL brand styling.",
+  "scale":{"0":"absent or clearly violated","1":"weak","2":"acceptable","3":"strong"},
+  "dimensions":[
+    {"id":"narrative_logic","weight":0.18,"criteria":"Clear claim/question and supporting evidence in comprehensible sequence."},
+    {"id":"information_hierarchy","weight":0.16,"criteria":"Primary, secondary and tertiary information are distinguishable."},
+    {"id":"relationship_encoding","weight":0.18,"criteria":"Comparison, process, hierarchy, causality, segmentation or ecosystem is encoded with appropriate diagram grammar."},
+    {"id":"chart_and_data_clarity","weight":0.14,"criteria":"Chart matches data relationship; labels, units, scales and legends are understandable."},
+    {"id":"density_and_chunking","weight":0.12,"criteria":"Information is chunked into meaningful groups and remains scannable."},
+    {"id":"evidence_and_context","weight":0.10,"criteria":"Claims, examples, data and caveats have sufficient context."},
+    {"id":"visual_readability","weight":0.08,"criteria":"Text, contrast, spacing and diagram labels remain readable."},
+    {"id":"structural_reusability","weight":0.04,"criteria":"Structure can be generalized without copying AIA brand styling."}
+  ],
+  "anti_patterns":["decorative-only connectors","unexplained chart encodings","unstructured text walls","overloaded diagrams","ambiguous process direction","data without units"],
+  "review_policy":"Do not transfer AIA warm-gold palette or brand appearance into GCL style scoring."
+}
