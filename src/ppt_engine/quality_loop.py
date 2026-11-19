@@ -47,7 +47,7 @@ def run_quality_loop(ir: DesignIR, output_dir: str | Path,
     pptx=render_pptx(current,out/f"{current.slide_id}.pptx",ledger=ledger)
     pdf=export_pdf(pptx,out/"pdf")
     pngs=export_pngs(pdf,out/"png")
-    critic=critique_slide(current,str(pngs[0]) if pngs else None)
+    critic=critique_slide(current,str(pngs[0]) if pngs else None,ledger=ledger)
     if critic.decision=="accept_for_human_review":
         stopped="critic_found_no_blocking_or_review_findings"
     elif stopped=="no_safe_repairs_remaining":
