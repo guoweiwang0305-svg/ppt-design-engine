@@ -208,3 +208,8 @@ uv run ppt-engine score-visual-benchmark examples/visual_critic_benchmark.templa
 ```
 
 The benchmark scorer reports precision/recall/F1 and false-positive/false-negative codes by slide type. The checked-in JSON is a blank template, not measured validation data.
+
+
+## P0.12.1 — Human visual benchmark
+
+The GCL × AIA 35-page review desk and benchmark protocol are in [tools/expert_review_desk](tools/expert_review_desk/README.md). The review manifest is an unlabeled queue; GCL and AIA have separate calibration rubrics in `reference_data/`. See [expert review and model benchmark protocol](docs/P0_12_EXPERT_REVIEW_AND_MODEL_BENCHMARK.md). Source slide PNGs are distributed separately and are not committed to this repository.
