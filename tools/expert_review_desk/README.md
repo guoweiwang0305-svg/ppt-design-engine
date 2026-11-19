@@ -53,3 +53,27 @@ uv run ppt-engine score-visual-benchmark expert-review.json \
 The CLI filters the app's extended case metadata to the benchmark schema and reports both page-type and source-family × page-type metrics.
 
 The 35-page manifest is a pending expert-review queue, not pre-labeled ground truth. No real model inference is bundled with this static UI.
+
+## Run the real batch model from the project CLI
+
+The repository now includes an OpenAI-compatible multimodal provider and a reproducible CLI runner. It requires an API endpoint that supports chat-completions image input and JSON output. Configure credentials only in your local shell:
+
+```bash
+export PDE_VISION_API_BASE="https://your-provider.example/v1"
+export PDE_VISION_API_KEY="..."
+export PDE_VISION_MODEL="your-pinned-vision-model-id"
+export PDE_VISION_PROVIDER="provider-and-deployment-name"
+```
+
+From the repository root, after extracting the 35 PNGs into `tools/expert_review_desk/visual_test_set/`:
+
+```bash
+uv run ppt-engine run-vision-benchmark \
+  tools/expert_review_desk/manifest.json \
+  tools/expert_review_desk/visual_test_set \
+  --output build/qa/gcl-aia-vision-benchmark.json
+```
+
+The runner refuses to start while any page is pending expert review, verifies that provider/model identity stays constant across the batch, uses temperature 0, saves each full model response, and emits a scored report with source-family × slide-type metrics. If a request fails or the model identity changes, the run stops rather than silently mixing models.
+
+For a custom vendor, implement the `VisionCriticProvider` protocol or expose an OpenAI-compatible `/chat/completions` endpoint. API keys must never be committed to Git or placed in the static review UI. Provider-specific image detail, token limits, retention and data residency remain the user's responsibility; confirm these with the provider before sending proprietary slide images.
