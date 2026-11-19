@@ -35,3 +35,23 @@ def test_ocr_maps_recognized_words_to_design_region(tmp_path,monkeypatch):
     assert report.available
     assert report.regions[0].status=="matched"
     assert report.regions[0].token_coverage==1
+
+def test_ocr_uses_resolved_data_ledger_value(tmp_path,monkeypatch):
+    from ppt_engine.ledger import DataLedger, LedgerEntry
+    ir=fixture()
+    ir.nodes[0].data_ref="kpi.revenue"
+    ir.nodes[0].text="Revenue"
+    image=tmp_path/"metric.png"
+    Image.new("RGB",(1000,500),"white").save(image)
+    tsv=(
+        "level\tpage_num\tblock_num\tpar_num\tline_num\tword_num\tleft\ttop\twidth\theight\tconf\ttext\n"
+        "5\t1\t1\t1\t1\t1\t120\t80\t50\t20\t95\t120\n"
+        "5\t1\t1\t1\t1\t2\t180\t80\t70\t20\t95\tmillion\n"
+    )
+    monkeypatch.setattr(ocr.shutil,"which",lambda _: "/usr/bin/tesseract")
+    monkeypatch.setattr(ocr.subprocess,"run",lambda *a,**k:SimpleNamespace(returncode=0,stdout=tsv,stderr=""))
+    ledger=DataLedger(entries={"kpi.revenue":LedgerEntry(id="kpi.revenue",value=120,unit="million",
+        definition="Revenue",source="source",time="2026")})
+    report=ocr.critique_rendered_text(ir,image,ledger=ledger)
+    assert report.regions[0].expected_text=="120 million"
+    assert report.regions[0].status=="matched"
