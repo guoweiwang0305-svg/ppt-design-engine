@@ -363,18 +363,28 @@ def run_vision_benchmark_command(
     manifest_file: Path,
     image_dir: Path,
     output: Path = Path("build/qa/gcl-aia-vision-benchmark.json"),
+    allow_provisional_labels: bool = typer.Option(
+        False,
+        "--allow-provisional-labels",
+        help="Allow exploratory scoring against AI-assisted, non-adjudicated labels.",
+    ),
 ):
     """Run one pinned OpenAI-compatible vision model over every reviewed manifest page."""
     from .vision_benchmark_runner import run_manifest
 
     try:
-        report = run_manifest(manifest_file, image_dir, output)
+        report = run_manifest(
+            manifest_file, image_dir, output,
+            allow_provisional_labels=allow_provisional_labels,
+        )
     except (ValueError, FileNotFoundError, RuntimeError) as exc:
         raise typer.BadParameter(str(exc)) from exc
     typer.echo(json.dumps({
         "provider": report["provider"],
         "model": report["model"],
         "case_count": report["case_count"],
+        "label_quality": report["label_quality"],
+        "benchmark_validity": report["benchmark_validity"],
         "score": report["score"],
         "output": str(output),
     }, ensure_ascii=False, indent=2))
