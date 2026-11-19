@@ -81,3 +81,5 @@ For a custom vendor, implement the `VisionCriticProvider` protocol or expose an 
 
 
 `--allow-provisional-labels` is an explicit exploratory opt-in. The current 35-page manifest contains AI-assisted provisional labels, so without this flag the runner blocks scoring. Outputs are marked `exploratory_only`; do not report them as gold-label model accuracy until independent human adjudication is complete. The runner also rejects model issue codes outside the dataset taxonomy.
+
+The benchmark JSON also includes ranked error analysis: false positives and false negatives by `source_family::slide_type`, plus the most frequently over-reported and missed issue codes. Use these rankings to choose the next prompt/rule calibration target rather than tuning from the overall F1 score alone.
