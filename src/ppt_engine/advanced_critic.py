@@ -7,6 +7,7 @@ from .visual_qa import audit_design_ir, audit_rendered_png
 from .image_critic import analyze_rendered_png
 from .ocr_critic import critique_rendered_text
 from .ledger import DataLedger
+from .vision_adapter import VisionCriticProvider, inspect_with_provider
 
 
 class GeometrySuggestion(StrictModel):
@@ -42,6 +43,7 @@ class AdvancedCriticReport(StrictModel):
     rendered_image_audit: dict | None = None
     rendered_visual_critique: dict | None = None
     ocr_critique: dict | None = None
+    vision_critique: dict | None = None
     human_review_required: bool = True
 
 
@@ -216,7 +218,8 @@ def _split_suggestion(ir: DesignIR) -> PageSplitSuggestion | None:
 
 def critique_slide(ir: DesignIR, rendered_png: str | None=None,
                    ledger: DataLedger | None=None,
-                   ocr_language: str="eng") -> AdvancedCriticReport:
+                   ocr_language: str="eng",
+                   vision_provider: VisionCriticProvider | None=None) -> AdvancedCriticReport:
     findings=_hierarchy(ir)+_layout_findings(ir)
     qa=audit_design_ir(ir)
     for issue in qa.issues:
@@ -226,10 +229,21 @@ def critique_slide(ir: DesignIR, rendered_png: str | None=None,
     image_audit=None
     visual_critique=None
     ocr_report=None
+    vision_report=None
     if rendered_png:
         image_audit=audit_rendered_png(rendered_png).model_dump(mode="json")
         visual_critique=analyze_rendered_png(ir, rendered_png).model_dump(mode="json")
         for finding in visual_critique["findings"]:
+            findings.append(finding)
+        vision_context={"slide_id":ir.slide_id,"thesis":ir.message.thesis,
+            "style_dna_ref":ir.constraints.style_dna_ref,
+            "canvas":ir.canvas.model_dump(mode="json"),
+            "nodes":[{"id":n.id,"text":n.text,"role":n.semantic_role.value,
+                "importance":n.importance.value,
+                "geometry":n.geometry.model_dump(mode="json") if n.geometry else None}
+                for n in ir.nodes]}
+        vision_report=inspect_with_provider(rendered_png,vision_context,vision_provider).model_dump(mode="json")
+        for finding in vision_report["findings"]:
             findings.append(finding)
         ocr_report=critique_rendered_text(ir, rendered_png, language=ocr_language, ledger=ledger).model_dump(mode="json")
         for finding in ocr_report["findings"]:
