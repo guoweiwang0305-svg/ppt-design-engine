@@ -16,6 +16,7 @@ from .production import PageQualityScores, score_page, select_layout, build_layo
 from .visual_qa import audit_design_ir, audit_rendered_png
 from .optimization import optimize_layout
 from .advanced_critic import critique_slide
+from .image_critic import analyze_rendered_png
 from .quality_loop import run_quality_loop
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
@@ -316,6 +317,21 @@ def quality_loop_command(
     typer.echo(result.model_dump_json(indent=2))
     if result.critic.decision == "blocked":
         raise typer.Exit(1)
+
+
+
+@app.command("image-critic")
+def image_critic_command(
+    ir_file: Path,
+    image_file: Path,
+    output: Path = Path("build/qa/rendered-visual-critique.json"),
+):
+    """Analyze rendered PNG regions against the expected DesignIR node geometry."""
+    ir = DesignIR.model_validate_json(ir_file.read_text(encoding="utf-8"))
+    report = analyze_rendered_png(ir, image_file)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
+    typer.echo(report.model_dump_json(indent=2))
 
 
 if __name__ == "__main__":
