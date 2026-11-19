@@ -88,6 +88,27 @@ def run_manifest(
         ))
 
     score = score_visual_benchmark(scored_cases)
+    false_positive_by_group: dict[str, int] = {}
+    false_negative_by_group: dict[str, int] = {}
+    false_positive_by_code: dict[str, int] = {}
+    false_negative_by_code: dict[str, int] = {}
+    for case in scored_cases:
+        expected = set(case.expected_issue_codes)
+        observed = set(case.observed_issue_codes)
+        group = f"{case.source_family or 'unspecified'}::{case.slide_type}"
+        false_positive_by_group[group] = false_positive_by_group.get(group, 0) + len(observed - expected)
+        false_negative_by_group[group] = false_negative_by_group.get(group, 0) + len(expected - observed)
+        for code in observed - expected:
+            false_positive_by_code[code] = false_positive_by_code.get(code, 0) + 1
+        for code in expected - observed:
+            false_negative_by_code[code] = false_negative_by_code.get(code, 0) + 1
+
+    def ranked_counts(values: dict[str, int]) -> list[dict[str, str | int]]:
+        return [
+            {"name": name, "count": count}
+            for name, count in sorted(values.items(), key=lambda item: (-item[1], item[0]))
+        ]
+
     output = {
         "dataset_id": payload.get("dataset_id", "gcl-aia-35"),
         "provider": identity[0] if identity else "",
@@ -99,6 +120,12 @@ def run_manifest(
         "predictions": predictions,
         "cases": [c.model_dump(mode="json") for c in scored_cases],
         "score": score.model_dump(mode="json"),
+        "error_analysis": {
+            "false_positive_by_page_type": ranked_counts(false_positive_by_group),
+            "false_negative_by_page_type": ranked_counts(false_negative_by_group),
+            "false_positive_issue_codes": ranked_counts(false_positive_by_code),
+            "false_negative_issue_codes": ranked_counts(false_negative_by_code),
+        },
     }
     output_path = Path(output_file)
     output_path.parent.mkdir(parents=True, exist_ok=True)
