@@ -21,7 +21,7 @@ def test_similarity_ranks_identical_higher():
     assert scores[0].total>=scores[1].total
 
 def test_adapter_requires_approval_and_mapping():
-    p=MinedPattern(pattern_id="p1",name="p",family="horizontal",frequency=3,reference_slides=["a:slide-1"],expert_status="approved")
+    p=MinedPattern(pattern_id="p1",name="p",family="horizontal",frequency=3,reference_slides=["a:slide-1"],feature_summary={},expert_status="approved")
     pending=p.model_copy(update={"pattern_id":"p2","expert_status":"unreviewed"})
     mapping={"p1":{"semantic_families":["comparison"],"relation_types":["comparison"],"layouts":["two_column"],"visual_grammar_ref":"comparison.json"}}
     result=adapt_approved_patterns([p,pending],mapping)
