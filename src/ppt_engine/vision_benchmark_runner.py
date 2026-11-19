@@ -1,0 +1,86 @@
+"""Run one pinned multimodal vision provider over a labeled image manifest."""
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Any
+
+from .openai_vision_provider import OpenAICompatibleVisionProvider
+from .visual_benchmark import VisualBenchmarkCase, score_visual_benchmark
+
+
+def run_manifest(
+    manifest_file: str | Path,
+    image_dir: str | Path,
+    output_file: str | Path,
+    provider: OpenAICompatibleVisionProvider | None = None,
+) -> dict[str, Any]:
+    manifest_path = Path(manifest_file)
+    image_root = Path(image_dir)
+    payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    cases = payload.get("cases", [])
+    pending = [c.get("case_id", "?") for c in cases if c.get("review_status") != "reviewed"]
+    if pending:
+        raise ValueError(
+            f"Expert review incomplete: {len(pending)} pending cases; first: {', '.join(pending[:5])}"
+        )
+
+    provider = provider or OpenAICompatibleVisionProvider()
+    predictions: dict[str, dict[str, Any]] = {}
+    identity: tuple[str, str] | None = None
+    scored_cases: list[VisualBenchmarkCase] = []
+
+    for case in cases:
+        case_id = case["case_id"]
+        image_path = image_root / case["image_file"]
+        if not image_path.is_file():
+            raise FileNotFoundError(f"{case_id}: image not found: {image_path}")
+        context = {
+            "case_id": case_id,
+            "source_family": case.get("source_family", ""),
+            "slide_type": case.get("slide_type", ""),
+            "style_reference": (
+                "GCL corporate brand style: restrained red, white, charcoal; assess style consistency."
+                if case.get("source_family") == "GCL"
+                else "AIA is an information-structure reference only; do not score it against GCL brand colors."
+            ),
+            "expert_labels_hidden": True,
+        }
+        result = provider.inspect(image_path, context)
+        if not result.available or not result.provider or not result.model:
+            raise RuntimeError(f"{case_id}: provider returned unavailable or missing identity.")
+        current_identity = (result.provider, result.model)
+        if identity is not None and current_identity != identity:
+            raise RuntimeError(
+                f"Model identity changed during batch: expected {identity}, got {current_identity}."
+            )
+        identity = current_identity
+        predictions[case_id] = result.model_dump(mode="json")
+        observed = sorted({finding.code for finding in result.findings})
+        scored_cases.append(VisualBenchmarkCase(
+            case_id=case_id,
+            slide_type=case.get("slide_type", "unspecified"),
+            source_family=case.get("source_family", ""),
+            image_file=case.get("image_file", ""),
+            review_status="reviewed",
+            reviewer_id=case.get("reviewer_id", ""),
+            expected_issue_codes=case.get("expected_issue_codes", []),
+            observed_issue_codes=observed,
+            reviewer_notes=case.get("reviewer_notes", ""),
+        ))
+
+    score = score_visual_benchmark(scored_cases)
+    output = {
+        "dataset_id": payload.get("dataset_id", "gcl-aia-35"),
+        "provider": identity[0] if identity else "",
+        "model": identity[1] if identity else "",
+        "temperature": 0,
+        "case_count": len(scored_cases),
+        "predictions": predictions,
+        "cases": [c.model_dump(mode="json") for c in scored_cases],
+        "score": score.model_dump(mode="json"),
+    }
+    output_path = Path(output_file)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
+    return output
