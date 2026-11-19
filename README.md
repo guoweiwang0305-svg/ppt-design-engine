@@ -198,3 +198,13 @@ uv run ppt-engine quality-loop build/design_ir/compiled-slide.json \
 ```
 
 This is an explainable raster preflight with optional Tesseract OCR, not a learned vision model. Without Tesseract, rendered wording is not OCR-verified. It cannot verify chart semantics, photo crop meaning or aesthetic quality. Findings are reviewable evidence; no geometry or content is silently rewritten. See [P0.12 Rendered Visual Critic](docs/P0_12_RENDERED_VISUAL_CRITIC.md).
+
+
+### Calibrate critic findings against human review
+
+```bash
+uv run ppt-engine score-visual-benchmark examples/visual_critic_benchmark.template.json \
+  --output build/qa/visual-benchmark-score.json
+```
+
+The benchmark scorer reports precision/recall/F1 and false-positive/false-negative codes by slide type. The checked-in JSON is a blank template, not measured validation data.
