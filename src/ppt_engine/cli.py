@@ -17,6 +17,7 @@ from .visual_qa import audit_design_ir, audit_rendered_png
 from .optimization import optimize_layout
 from .advanced_critic import critique_slide
 from .image_critic import analyze_rendered_png
+from .visual_benchmark import VisualBenchmarkCase, score_visual_benchmark
 from .quality_loop import run_quality_loop
 
 app = typer.Typer(help="PPT Design Engine — design intelligence and rendering tools")
@@ -333,6 +334,21 @@ def image_critic_command(
     """Analyze rendered PNG regions against the expected DesignIR node geometry."""
     ir = DesignIR.model_validate_json(ir_file.read_text(encoding="utf-8"))
     report = analyze_rendered_png(ir, image_file)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
+    typer.echo(report.model_dump_json(indent=2))
+
+
+
+@app.command("score-visual-benchmark")
+def score_visual_benchmark_command(
+    benchmark_file: Path,
+    output: Path = Path("build/qa/visual-benchmark-score.json"),
+):
+    """Score critic findings against human-labeled expected issue codes."""
+    payload = json.loads(benchmark_file.read_text(encoding="utf-8"))
+    cases = [VisualBenchmarkCase.model_validate(item) for item in payload["cases"]]
+    report = score_visual_benchmark(cases)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(report.model_dump_json(indent=2), encoding="utf-8")
     typer.echo(report.model_dump_json(indent=2))
