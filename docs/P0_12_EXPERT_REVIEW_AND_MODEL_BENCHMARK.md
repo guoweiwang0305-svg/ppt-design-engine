@@ -23,5 +23,13 @@ TP: expert and model both flag. FP: model only. FN: expert only. Precision=TP/(T
 ## Optimization
 Rank error concentrations, inspect representative pages, identify whether cause is taxonomy, prompt, visual evidence, page-type mismatch or model capability. Change one major factor at a time, version it, rerun all 35 pages and compare FP/FN, precision, recall, F1 and regressions across both families.
 
+## Current execution status (2026-11-19)
+- All 16 GCL pages and 19 AIA pages received a provisional GPT-6 visual expert pass in the prescribed order.
+- Labels, issue evidence and per-page notes are stored in `tools/expert_review_desk/manifest.json`.
+- GCL profile quality gates were updated from the provisional GCL review.
+- Reusable information structures from AIA were extracted into `reference_data/aia_information_structure_patterns.json`; these are structure references only, not GCL styling.
+- The review set is not independently human-adjudicated gold truth yet.
+- No separate batch vision endpoint is configured, so model predictions and FP/FN are still pending. Do not treat blank `observed_issue_codes` as model negatives or score the current manifest as a completed model benchmark.
+
 ## Truth status
-The manifest is an expert-review queue, not labeled ground truth. Rubrics are proposed calibration instruments awaiting expert validation. No measured FP/FN or model quality claim exists until labels are complete and a real model endpoint has run.
+The current labels are provisional AI-assisted expert annotations. Human adjudication and a real, pinned provider/model run are required before reporting measured model accuracy.
