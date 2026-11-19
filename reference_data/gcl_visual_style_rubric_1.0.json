@@ -1,0 +1,17 @@
+{
+  "rubric_id":"gcl-corporate-visual-style-baseline-1.0","source_family":"GCL","status":"rubric_defined_labels_pending",
+  "purpose":"Expert calibration rubric for the 16 GCL pages; do not apply it to AIA pages.",
+  "scale":{"0":"absent or clearly violated","1":"weak","2":"acceptable","3":"strong"},
+  "dimensions":[
+    {"id":"brand_palette_discipline","weight":0.18,"criteria":"Restrained corporate red, white, charcoal and neutral balance; red is purposeful emphasis."},
+    {"id":"typographic_hierarchy","weight":0.16,"criteria":"Clear title/body/annotation hierarchy, consistent font roles and readable sizing."},
+    {"id":"composition_and_alignment","weight":0.16,"criteria":"Stable grid, deliberate alignment, balanced visual mass and coherent margins."},
+    {"id":"information_hierarchy","weight":0.14,"criteria":"One dominant message; supporting evidence is visibly subordinate."},
+    {"id":"diagram_and_chart_craft","weight":0.14,"criteria":"Charts and diagrams encode relationships accurately and legibly."},
+    {"id":"whitespace_and_density","weight":0.10,"criteria":"Whitespace separates meaning; density remains controlled."},
+    {"id":"imagery_and_crop","weight":0.06,"criteria":"Images support the message and use purposeful crops."},
+    {"id":"cross_page_consistency","weight":0.06,"criteria":"Repeated components, titles, colors and page grammar cohere."}
+  ],
+  "anti_patterns":["meaningless gradients","heavy shadows","excessive rounded cards","random icons/arrows","competing focal points","inconsistent title placement"],
+  "review_policy":"Independent expert labels first; validate and version weights before treating this as ground truth."
+}
