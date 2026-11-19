@@ -8,6 +8,7 @@ from .ledger import DataLedger
 from .optimization import optimize_layout, RepairAction
 from .advanced_critic import critique_slide, AdvancedCriticReport
 from .renderer import render_pptx, export_pdf, export_pngs
+from .repair_validation import compare_repair_reports
 
 
 class QualityLoopResult(StrictModel):
@@ -19,6 +20,7 @@ class QualityLoopResult(StrictModel):
     rounds: int
     critic: AdvancedCriticReport
     stopped_reason: str
+    repair_comparison: dict | None = None
 
 
 def run_quality_loop(ir: DesignIR, output_dir: str | Path,
@@ -33,26 +35,49 @@ def run_quality_loop(ir: DesignIR, output_dir: str | Path,
         raise ValueError("max_rounds must be between 1 and 8")
     out=Path(output_dir)
     out.mkdir(parents=True,exist_ok=True)
-    current=ir.model_copy(deep=True)
+    baseline=ir.model_copy(deep=True)
+    current=baseline.model_copy(deep=True)
     actions=[]
     rounds=0
     stopped="max_rounds_reached"
     for _ in range(max_rounds):
         result=optimize_layout(current,max_iterations=1)
-        current=result.design_ir
-        rounds += 1
-        actions.extend(result.report.repair_actions)
         if not result.report.repair_actions:
             stopped="no_safe_repairs_remaining"
             break
+        current=result.design_ir
+        rounds += 1
+        actions.extend(result.report.repair_actions)
+
+    comparison=None
+    if actions:
+        comparison_root=out/"repair_comparison"
+        reports=[]
+        for label, candidate_ir in (("baseline",baseline),("candidate",current)):
+            stage=comparison_root/label
+            stage.mkdir(parents=True,exist_ok=True)
+            stage_pptx=render_pptx(candidate_ir,stage/f"{candidate_ir.slide_id}.pptx",ledger=ledger)
+            stage_pdf=export_pdf(stage_pptx,stage/"pdf")
+            stage_pngs=export_pngs(stage_pdf,stage/"png")
+            reports.append(critique_slide(candidate_ir,str(stage_pngs[0]) if stage_pngs else None,
+                ledger=ledger,ocr_language=ocr_language))
+        comparison=compare_repair_reports(reports[0],reports[1])
+        if not comparison.accepted:
+            current=baseline
+            actions=[]
+            stopped="repair_rejected_and_rolled_back"
+        else:
+            stopped="repair_accepted_after_rendered_comparison"
+
     pptx=render_pptx(current,out/f"{current.slide_id}.pptx",ledger=ledger)
     pdf=export_pdf(pptx,out/"pdf")
     pngs=export_pngs(pdf,out/"png")
     critic=critique_slide(current,str(pngs[0]) if pngs else None,ledger=ledger,ocr_language=ocr_language)
-    if critic.decision=="accept_for_human_review":
+    if critic.decision=="accept_for_human_review" and not comparison:
         stopped="critic_found_no_blocking_or_review_findings"
     elif stopped=="no_safe_repairs_remaining":
         stopped="critic_requires_design_or_human_review"
     return QualityLoopResult(design_ir=current,pptx_path=str(pptx),pdf_path=str(pdf),
         png_paths=[str(p) for p in pngs],repair_actions=actions,rounds=rounds,
-        critic=critic,stopped_reason=stopped)
+        critic=critic,stopped_reason=stopped,
+        repair_comparison=comparison.model_dump(mode="json") if comparison else None)
