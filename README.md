@@ -185,7 +185,7 @@ This produces editable PPTX, PDF, PNG, final DesignIR and a structured critic re
 
 ## P0.12 — Rendered Visual Critic
 
-P0.12 analyzes actual rendered PNG pixels and maps the results back to DesignIR text regions. It measures region ink occupancy, edge crowding, contrast proxies, global visual mass and quadrant density. It supports light text on dark panels using local-background foreground detection.
+P0.12 analyzes actual rendered PNG pixels and maps the results back to DesignIR text regions. It measures region ink occupancy, edge crowding, contrast proxies, global visual mass and quadrant density. When Tesseract is installed, it can also map recognized OCR word boxes to expected text regions and verify DataLedger-backed metric text. It supports light text on dark panels using local-background foreground detection.
 
 ```bash
 uv run ppt-engine image-critic build/design_ir/compiled-slide.json \
@@ -197,4 +197,4 @@ uv run ppt-engine quality-loop build/design_ir/compiled-slide.json \
   --max-rounds 4
 ```
 
-This is an explainable raster preflight, not OCR or a learned vision model. It cannot verify wording, chart semantics, photo crop meaning or aesthetic quality. Findings are reviewable evidence; no geometry or content is silently rewritten. See [P0.12 Rendered Visual Critic](docs/P0_12_RENDERED_VISUAL_CRITIC.md).
+This is an explainable raster preflight with optional Tesseract OCR, not a learned vision model. Without Tesseract, rendered wording is not OCR-verified. It cannot verify chart semantics, photo crop meaning or aesthetic quality. Findings are reviewable evidence; no geometry or content is silently rewritten. See [P0.12 Rendered Visual Critic](docs/P0_12_RENDERED_VISUAL_CRITIC.md).
