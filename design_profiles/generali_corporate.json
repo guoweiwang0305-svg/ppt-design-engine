@@ -1,15 +1,154 @@
 {
- "profile_id":"generali_corporate_reference_v1",
- "display_name":"Generali Corporate / 忠利集团企业报告风格",
- "provenance":{"official_sources":["https://www.generali.com/who-we-are/our-business","https://www.generali.com/investors/Strategy","https://www.generali.com/doc/jcr:72997b15-9217-4c80-a775-6329c207d1f1/Generali%20FY25%20presentation_.pdf","https://www.generali.com/doc/jcr:d216ba07-1369-424a-b16b-335aa52f6c9d/Annual%20Integrated%20Report%20and%20Consolidated%20Financial%20Statements%202025_Generali%20Group_final_interactive.pdf"],"user_reference_decks":["GCL + Alleanza Assicurazioni. 20thOct2026_v1(1).pptx","开门红储蓄型保险的“人、货、场”V2（广州AIA）.pptx"],"note":"Engineering approximation, not an official licensed brand book."},
- "visual_language":{
-  "primary_palette":["#C00000","#B5121B","#8F1018"],"neutral_palette":["#FFFFFF","#FBF3F3","#F2F2F2","#333333","#202020"],"accent_palette":["#F9AAB1","#D9D9D9"],
-  "color_rules":["Use brand red for conclusion, KPI emphasis and focal data series.","Use white/light neutral backgrounds for analytical pages.","Use charcoal body text; avoid red paragraphs.","Exact HEX values are approximations and must be calibrated from source assets."],
-  "typography":{"title":"Strong sans-serif, short declarative conclusion","body":"Neutral sans-serif, compact but readable","numbers":"Tabular numerals and oversized key figures","hierarchy":["page conclusion","section label","primary metric","evidence/detail","source/definition"]},
-  "iconography":{"style":"One consistent line-icon or restrained solid geometric family","stroke":"Consistent stroke weight and optical size","semantic_rule":"Icons encode category or action, never decorate empty space","density_rule":"Use icons for repeated taxonomies/process nodes; avoid one-off icon clutter"},
-  "charts":{"principles":["Choose chart from analytical question, not aesthetic preference.","Use red for focal series and neutral greys for context.","Direct-label values and units when it reduces legend lookup.","Show baseline, period, scope and source.","Use small multiples for segment comparisons.","Encode actuals, targets and forecasts consistently."],"preferred_families":["time_series_line_or_column","ranked_horizontal_bar","mix_stacked_bar","regional_map_with_callouts","kpi_scorecard_with_context","customer_segmentation_matrix","strategy_pillar_framework","omnichannel_journey","ecosystem_network"]},
-  "information_architecture":{"default_reading_path":["conclusion","evidence","mechanism","implication"],"high_density_rule":"Increase capacity through grouping, hierarchy, direct labels and spatial structure; do not solve by shrinking fonts.","logic_patterns":["strategy_to_capability_to_kpi","market_context_to_position_to_action","customer_segment_to_need_to_proposition","channel_to_touchpoint_to_conversion","product_to_life_stage_to_service","ecosystem_actor_to_value_exchange"]},
-  "layout_families":["executive_kpi_dashboard","growth_timeline","market_ranking","regional_presence_map","customer_segmentation","tagging_taxonomy","channel_conversion_funnel","omo_journey","product_life_stage_matrix","health_ecosystem_map","strategy_pillar_map","multi_metric_comparison"],
-  "anti_patterns":["equal-weight card grids when one conclusion should dominate","decorative icons without semantic mapping","red text on pale red with insufficient contrast","charts without units/source/time/scope","unexplained compound metrics","tiny detached legends","unstructured dense text blocks","repeated index slides without narrative purpose"]
- }
+  "profile_id": "generali_corporate_reference_v1",
+  "display_name": "Generali Corporate / 忠利集团企业报告风格",
+  "provenance": {
+    "official_sources": [
+      "https://www.generali.com/who-we-are/our-business",
+      "https://www.generali.com/investors/Strategy",
+      "https://www.generali.com/doc/jcr:72997b15-9217-4c80-a775-6329c207d1f1/Generali%20FY25%20presentation_.pdf",
+      "https://www.generali.com/doc/jcr:d216ba07-1369-424a-b16b-335aa52f6c9d/Annual%20Integrated%20Report%20and%20Consolidated%20Financial%20Statements%202025_Generali%20Group_final_interactive.pdf"
+    ],
+    "user_reference_decks": [
+      "GCL + Alleanza Assicurazioni. 20thOct2026_v1(1).pptx",
+      "开门红储蓄型保险的“人、货、场”V2（广州AIA）.pptx"
+    ],
+    "note": "Engineering approximation, not an official licensed brand book."
+  },
+  "visual_language": {
+    "primary_palette": [
+      "#C00000",
+      "#B5121B",
+      "#8F1018"
+    ],
+    "neutral_palette": [
+      "#FFFFFF",
+      "#FBF3F3",
+      "#F2F2F2",
+      "#333333",
+      "#202020"
+    ],
+    "accent_palette": [
+      "#F9AAB1",
+      "#D9D9D9"
+    ],
+    "color_rules": [
+      "Use brand red for conclusion, KPI emphasis and focal data series.",
+      "Use white/light neutral backgrounds for analytical pages.",
+      "Use charcoal body text; avoid red paragraphs.",
+      "Exact HEX values are approximations and must be calibrated from source assets."
+    ],
+    "typography": {
+      "title": "Strong sans-serif, short declarative conclusion",
+      "body": "Neutral sans-serif, compact but readable",
+      "numbers": "Tabular numerals and oversized key figures",
+      "hierarchy": [
+        "page conclusion",
+        "section label",
+        "primary metric",
+        "evidence/detail",
+        "source/definition"
+      ]
+    },
+    "iconography": {
+      "style": "One consistent line-icon or restrained solid geometric family",
+      "stroke": "Consistent stroke weight and optical size",
+      "semantic_rule": "Icons encode category or action, never decorate empty space",
+      "density_rule": "Use icons for repeated taxonomies/process nodes; avoid one-off icon clutter"
+    },
+    "charts": {
+      "principles": [
+        "Choose chart from analytical question, not aesthetic preference.",
+        "Use red for focal series and neutral greys for context.",
+        "Direct-label values and units when it reduces legend lookup.",
+        "Show baseline, period, scope and source.",
+        "Use small multiples for segment comparisons.",
+        "Encode actuals, targets and forecasts consistently."
+      ],
+      "preferred_families": [
+        "time_series_line_or_column",
+        "ranked_horizontal_bar",
+        "mix_stacked_bar",
+        "regional_map_with_callouts",
+        "kpi_scorecard_with_context",
+        "customer_segmentation_matrix",
+        "strategy_pillar_framework",
+        "omnichannel_journey",
+        "ecosystem_network"
+      ]
+    },
+    "information_architecture": {
+      "default_reading_path": [
+        "conclusion",
+        "evidence",
+        "mechanism",
+        "implication"
+      ],
+      "high_density_rule": "Increase capacity through grouping, hierarchy, direct labels and spatial structure; do not solve by shrinking fonts.",
+      "logic_patterns": [
+        "strategy_to_capability_to_kpi",
+        "market_context_to_position_to_action",
+        "customer_segment_to_need_to_proposition",
+        "channel_to_touchpoint_to_conversion",
+        "product_to_life_stage_to_service",
+        "ecosystem_actor_to_value_exchange"
+      ],
+      "review_derived_rules": [
+        "Use conclusion-led title; do not let a chart or process diagram become the title's substitute.",
+        "For dense customer segmentation and taxonomy, separate classification logic from detailed field/value examples.",
+        "For omnichannel process slides, make online/offline boundaries, stage direction and conversion outcomes explicit.",
+        "For multi-step digital workflows, use progressive stages and keep each node to a short action phrase.",
+        "For bilingual system maps, keep language roles consistent and avoid mixing translated prose with tiny labels."
+      ]
+    },
+    "layout_families": [
+      "executive_kpi_dashboard",
+      "growth_timeline",
+      "market_ranking",
+      "regional_presence_map",
+      "customer_segmentation",
+      "tagging_taxonomy",
+      "channel_conversion_funnel",
+      "omo_journey",
+      "product_life_stage_matrix",
+      "health_ecosystem_map",
+      "strategy_pillar_map",
+      "multi_metric_comparison"
+    ],
+    "anti_patterns": [
+      "equal-weight card grids when one conclusion should dominate",
+      "decorative icons without semantic mapping",
+      "red text on pale red with insufficient contrast",
+      "charts without units/source/time/scope",
+      "unexplained compound metrics",
+      "tiny detached legends",
+      "unstructured dense text blocks",
+      "repeated index slides without narrative purpose"
+    ],
+    "quality_gates": {
+      "source_basis": "Provisional visual expert review of 16 GCL reference pages, 2026-11-19; not yet independently human-adjudicated.",
+      "minimum_text_readability": {
+        "body_font_pt": 16,
+        "footnote_font_pt": 9,
+        "rule": "These are initial PPT canvas thresholds; override only when the projected viewing context is explicitly specified."
+      },
+      "annotation_hygiene": [
+        "Remove reviewer/editorial annotations from final slides.",
+        "Do not introduce blue instruction text into the red/white/charcoal brand system unless it is semantically encoded and approved."
+      ],
+      "density": [
+        "Do not reduce font size as the first response to overflow.",
+        "When a matrix/process page exceeds legible node text or has more than 8 dense modules, recommend splitting or progressive disclosure."
+      ],
+      "chart_legibility": [
+        "Keep axis labels, units, time periods and source readable at presentation scale.",
+        "Use direct labels or small multiples when legend/axis lookup becomes burdensome.",
+        "Differentiate actual, forecast and target with consistent encodings."
+      ],
+      "composition": [
+        "One dominant takeaway per page.",
+        "Keep title anchor and page margins consistent.",
+        "Remove unexplained black placeholders, stray marks and decorative-only icons."
+      ]
+    }
+  }
 }
