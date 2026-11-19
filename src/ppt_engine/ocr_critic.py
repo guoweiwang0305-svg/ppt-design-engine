@@ -13,6 +13,7 @@ from typing import Literal
 
 from pydantic import Field
 from .models import DesignIR, StrictModel
+from .ledger import DataLedger
 
 
 class OCRWord(StrictModel):
@@ -53,7 +54,7 @@ def _coverage(expected: str, actual: str) -> float:
 
 
 def critique_rendered_text(ir: DesignIR, image_path: str | Path,
-                           language: str = "eng") -> OCRCritique:
+                           language: str = "eng", ledger: DataLedger | None = None) -> OCRCritique:
     path = Path(image_path)
     executable = shutil.which("tesseract")
     if not executable:
@@ -91,7 +92,18 @@ def critique_rendered_text(ir: DesignIR, image_path: str | Path,
     regions=[]
     findings=[]
     for node in ir.nodes:
-        if node.geometry is None or node.visual_type!="text" or not node.text.strip():
+        if node.geometry is None or node.visual_type!="text":
+            continue
+        expected_text=node.text
+        if node.data_ref:
+            if ledger is None:
+                findings.append({"code":"ocr_metric_skipped","severity":"info","node_ids":[node.id],
+                    "diagnosis":"Metric text is rendered from DataLedger; OCR comparison skipped because no ledger was supplied.",
+                    "recommendation":"Pass the same DataLedger used for rendering to enable metric text verification."})
+                continue
+            entry=ledger.resolve(node.data_ref)
+            expected_text=f"{entry.value} {entry.unit}".strip()
+        if not expected_text.strip():
             continue
         g=node.geometry
         box=(round(g.x*sx),round(g.y*sy),round((g.x+g.width)*sx),round((g.y+g.height)*sy))
@@ -105,11 +117,11 @@ def critique_rendered_text(ir: DesignIR, image_path: str | Path,
             elif x1 < box[2] and x2 > box[0] and y1 < box[3] and y2 > box[1]:
                 outside += 1
         recognized=" ".join(inside)
-        coverage=_coverage(node.text,recognized)
+        coverage=_coverage(expected_text,recognized)
         status="matched" if coverage>=0.8 else ("partial" if coverage>0 else "missing")
         if outside:
             status="outside_region"
-        regions.append(OCRRegionResult(node_id=node.id,expected_text=node.text,
+        regions.append(OCRRegionResult(node_id=node.id,expected_text=expected_text,
             recognized_text=recognized,token_coverage=round(coverage,3),
             words_found=len(inside),words_outside_region=outside,status=status))
         if status=="missing":
