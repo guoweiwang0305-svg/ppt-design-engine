@@ -49,3 +49,17 @@ def test_raster_critic_flags_blank_render(tmp_path):
     Image.new("RGB",(1000,500),"white").save(path)
     report=analyze_rendered_png(make_ir(),path)
     assert any(f.code=="rendered_page_near_blank" for f in report.findings)
+
+
+def test_raster_critic_handles_light_text_on_dark_panel(tmp_path):
+    path=tmp_path/"dark.png"
+    image=Image.new("RGB",(1000,500),"white")
+    draw=ImageDraw.Draw(image)
+    draw.rectangle((100,50,900,150),fill="#202020")
+    for x in range(130,550,35):
+        draw.rectangle((x,80,x+18,95),fill="white")
+    image.save(path)
+    report=analyze_rendered_png(make_ir(),path)
+    title=next(metric for metric in report.region_metrics if metric.node_id=="title")
+    assert title.ink_ratio>0
+    assert title.status!="sparse"
