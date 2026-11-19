@@ -33,3 +33,12 @@ Rank error concentrations, inspect representative pages, identify whether cause 
 
 ## Truth status
 The current labels are provisional AI-assisted expert annotations. Human adjudication and a real, pinned provider/model run are required before reporting measured model accuracy.
+
+## Executable provider integration (2026-11-19)
+
+A concrete OpenAI-compatible multimodal adapter is available in `src/ppt_engine/openai_vision_provider.py`; batch orchestration is in `src/ppt_engine/vision_benchmark_runner.py`; CLI command: `ppt-engine run-vision-benchmark`.
+
+- Credentials are read from `PDE_VISION_API_BASE`, `PDE_VISION_API_KEY`, `PDE_VISION_MODEL`, and optional `PDE_VISION_PROVIDER`.
+- The runner requires all manifest pages to be reviewed, sends the complete PNG to the same configured model at temperature 0, rejects model identity changes, stores raw structured predictions, and scores the same cases.
+- Automated tests cover batch scoring, pending-label blocking and identity mismatch.
+- This is provider integration code, not proof that a production provider has been configured or that the real 35-page inference has run.
