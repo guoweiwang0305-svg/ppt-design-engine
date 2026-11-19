@@ -107,6 +107,7 @@ def run_manifest(
         return [
             {"name": name, "count": count}
             for name, count in sorted(values.items(), key=lambda item: (-item[1], item[0]))
+            if count > 0
         ]
 
     output = {
