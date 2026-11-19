@@ -14,6 +14,7 @@ def run_manifest(
     image_dir: str | Path,
     output_file: str | Path,
     provider: OpenAICompatibleVisionProvider | None = None,
+    allow_provisional_labels: bool = False,
 ) -> dict[str, Any]:
     manifest_path = Path(manifest_file)
     image_root = Path(image_dir)
@@ -23,6 +24,17 @@ def run_manifest(
     if pending:
         raise ValueError(
             f"Expert review incomplete: {len(pending)} pending cases; first: {', '.join(pending[:5])}"
+        )
+    provisional = any(
+        "provisional" in str(case.get("review_provenance", "")).lower()
+        or "GPT-6" in str(case.get("reviewer_id", ""))
+        for case in cases
+    )
+    if provisional and not allow_provisional_labels:
+        raise ValueError(
+            "Manifest contains provisional AI-assisted labels. "
+            "Human-adjudicate the labels or pass allow_provisional_labels=True "
+            "for an explicitly exploratory run."
         )
 
     provider = provider or OpenAICompatibleVisionProvider()
@@ -57,6 +69,12 @@ def run_manifest(
         identity = current_identity
         predictions[case_id] = result.model_dump(mode="json")
         observed = sorted({finding.code for finding in result.findings})
+        unknown_codes = sorted(set(observed) - set(payload.get("issue_code_taxonomy", [])))
+        if unknown_codes:
+            raise ValueError(
+                f"{case_id}: model returned issue codes outside the dataset taxonomy: "
+                f"{', '.join(unknown_codes)}"
+            )
         scored_cases.append(VisualBenchmarkCase(
             case_id=case_id,
             slide_type=case.get("slide_type", "unspecified"),
@@ -76,6 +94,8 @@ def run_manifest(
         "model": identity[1] if identity else "",
         "temperature": 0,
         "case_count": len(scored_cases),
+        "label_quality": "provisional_ai_assisted" if provisional else "human_adjudicated",
+        "benchmark_validity": "exploratory_only" if provisional else "gold_label_candidate",
         "predictions": predictions,
         "cases": [c.model_dump(mode="json") for c in scored_cases],
         "score": score.model_dump(mode="json"),
