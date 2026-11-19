@@ -14,7 +14,7 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.dml.color import RGBColor
 
 from .reverse_engineering import (
-    BoundingBox, Connector, ReferenceVisualPage, VisualElement,
+    BoundingBox, ReferenceVisualPage, VisualElement,
 )
 
 
