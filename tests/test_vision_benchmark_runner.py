@@ -48,7 +48,11 @@ def _manifest(tmp_path: Path, statuses=None):
             "expected_issue_codes": ["information_overcrowded"] if i == 0 else [],
         })
     manifest = tmp_path / "manifest.json"
-    manifest.write_text(json.dumps({"dataset_id": "test", "cases": cases}), encoding="utf-8")
+    manifest.write_text(json.dumps({
+        "dataset_id": "test",
+        "issue_code_taxonomy": ["information_overcrowded"],
+        "cases": cases,
+    }), encoding="utf-8")
     return manifest, image_dir
 
 
@@ -79,3 +83,41 @@ def test_run_manifest_rejects_model_identity_change(tmp_path):
             manifest, image_dir, tmp_path / "out.json",
             provider=FakeProvider(["vision-v1", "vision-v2"]),
         )
+
+
+def test_run_manifest_requires_opt_in_for_provisional_labels(tmp_path):
+    manifest, image_dir = _manifest(tmp_path)
+    payload = json.loads(manifest.read_text(encoding="utf-8"))
+    payload["cases"][0]["review_provenance"] = "provisional GPT-6 review"
+    manifest.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ValueError, match="provisional AI-assisted labels"):
+        run_manifest(manifest, image_dir, tmp_path / "out.json", provider=FakeProvider())
+
+
+def test_run_manifest_marks_exploratory_provisional_scores(tmp_path):
+    manifest, image_dir = _manifest(tmp_path)
+    payload = json.loads(manifest.read_text(encoding="utf-8"))
+    payload["cases"][0]["review_provenance"] = "provisional GPT-6 review"
+    manifest.write_text(json.dumps(payload), encoding="utf-8")
+    report = run_manifest(
+        manifest, image_dir, tmp_path / "out.json",
+        provider=FakeProvider(), allow_provisional_labels=True,
+    )
+    assert report["label_quality"] == "provisional_ai_assisted"
+    assert report["benchmark_validity"] == "exploratory_only"
+
+
+def test_run_manifest_rejects_unknown_issue_codes(tmp_path):
+    manifest, image_dir = _manifest(tmp_path)
+    class UnknownCodeProvider:
+        def inspect(self, image_path: Path, context: dict) -> VisionCritique:
+            return VisionCritique(
+                available=True, provider="test-provider", model="vision-v1",
+                image_path=str(image_path),
+                findings=[VisionFinding(
+                    code="invented_code", category="other", severity="minor",
+                    rationale="Unknown", recommendation="Ignore", confidence=0.5,
+                )],
+            )
+    with pytest.raises(ValueError, match="outside the dataset taxonomy"):
+        run_manifest(manifest, image_dir, tmp_path / "out.json", provider=UnknownCodeProvider())
