@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "case_id": "cover-001",
+      "slide_type": "cover",
+      "expected_issue_codes": [],
+      "observed_issue_codes": [],
+      "reviewer_notes": "Replace with expert-reviewed findings from the rendered slide."
+    },
+    {
+      "case_id": "kpi-001",
+      "slide_type": "kpi",
+      "expected_issue_codes": [],
+      "observed_issue_codes": [],
+      "reviewer_notes": ""
+    },
+    {
+      "case_id": "chart-001",
+      "slide_type": "chart",
+      "expected_issue_codes": [],
+      "observed_issue_codes": [],
+      "reviewer_notes": ""
+    }
+  ]
+}
