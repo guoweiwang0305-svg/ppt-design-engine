@@ -27,9 +27,11 @@ def _findings(report: Any) -> list[dict]:
     if not isinstance(report, dict):
         raise TypeError("Critic report must be a mapping or Pydantic model")
     result = list(report.get("findings", []))
-    for key in ("rendered_visual_critique", "ocr_critique", "vision_critique"):
-        section = report.get(key) or {}
-        result.extend(section.get("findings", []))
+    # AdvancedCriticReport already aggregates non-info nested findings.
+    if not result:
+        for section_key in ("rendered_visual_critique", "ocr_critique", "vision_critique"):
+            section = report.get(section_key) or {}
+            result.extend(section.get("findings", []))
     return [item for item in result if item.get("severity") != "info"]
 
 
